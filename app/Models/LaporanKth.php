@@ -21,6 +21,7 @@ class LaporanKth extends Model
         'sertifikat_halal_file',
         'merek_dagang',
         'potensi_produksi',
+        'satuan_produksi',
         'nte_per_bulan',
         'jangkauan_pemasaran',
         'kendala_usaha',
@@ -35,20 +36,18 @@ class LaporanKth extends Model
         'nte_per_bulan' => 'decimal:2',
     ];
 
-    // Relasi ke KTH
     public function kth()
     {
         return $this->belongsTo(Kth::class, 'id_kth');
     }
 
-    // Relasi ke Penyuluh (yang input laporan)
     public function penyuluh()
     {
         return $this->belongsTo(Penyuluh::class, 'id_penyuluh');
     }
 
-    // Relasi ke DokumentasiLaporan
-    public function dokumentasiLaporan()
+    // 🔥 RELASI KE DOKUMENTASI LAPORAN
+    public function dokumentasi()
     {
         return $this->hasMany(DokumentasiLaporan::class, 'id_laporan_kth');
     }

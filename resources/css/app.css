@@ -13,3 +13,35 @@
     --color-tertiary: #687B71;
     --color-neutral:#F8F9FA
 }
+
+[x-cloak] { display: none !important; }
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+dialog {
+    border: none;
+    padding: 0;
+    max-width: 90vw;
+    margin:auto;
+    overflow: hidden;
+}
+
+#mapContainer {
+    height: 350px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.leaflet-container {
+    height: 100%;
+    width: 100%;
+    border-radius: 8px;
+    z-index: 1;
+}
+
+.leaflet-control-zoom {
+    z-index: 2 !important;
+}
+        

@@ -8,6 +8,8 @@
 
     <!-- Tailwind CSS via Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 </head>
 
@@ -43,11 +45,11 @@
             <nav class="w-full flex-1 overflow-y-auto">
                 @auth
                     @if (auth()->user()->role == 'admin')
-                        @include('layouts.partials.sidebar-admin')
+                        @include('layouts.sidebar.sidebar-admin')
                     @elseif(auth()->user()->role == 'penyuluh')
-                        @include('layouts.partials.sidebar-penyuluh')
+                        @include('layouts.sidebar.sidebar-penyuluh')
                     @elseif(auth()->user()->role == 'pimpinan')
-                        @include('layouts.partials.sidebar-pimpinan')
+                        @include('layouts.sidebar.sidebar-pimpinan')
                     @endif
                 @endauth
             </nav>
@@ -79,14 +81,13 @@
                 </button>
                 @auth
                     @if (auth()->user()->role == 'admin')
-                        <h2 class="text-xl font-poppins font-semibold text-primary">Dashboard Admin</h2>
+                        @include('layouts.header.header-admin')
                     @elseif(auth()->user()->role == 'penyuluh')
-                        <h2 class="text-xl font-poppins font-semibold text-primary">Dashboard Penyuluh</h2>
+                        @include('layouts.header.header-penyuluh')
                     @elseif(auth()->user()->role == 'pimpinan')
-                        <h2 class="text-xl font-poppins font-semibold text-primary">Dashboard Pimpinan</h2>
+                        @include('layouts.header.header-pimpinan')
                     @endif
                 @endauth
-
             </div>
 
             <div class="flex items-center gap-6">
@@ -97,8 +98,14 @@
                         <p class="text-sm font-poppins font-semibold text-gray-800">{{ auth()->user()->name }}</p>
                         <p class="text-xs font-inter text-gray-500 capitalize">{{ auth()->user()->role }}</p>
                     </div>
-                    <img src="{{ auth()->user()->foto_profil ? asset('storage/foto_profil/' . auth()->user()->foto_profil) : asset('images/default-avatar.png') }}"
-                        alt="Avatar" class="w-8 h-8 rounded-full border border-gray-300 object-cover">
+                    @php
+                        $fotoProfil = auth()->user()->foto_profil;
+                        $fotoUrl = $fotoProfil ? asset('storage/' . $fotoProfil) : asset('images/default-avatar.png');
+                    @endphp
+
+                    <img src="{{ $fotoUrl }}" alt="Avatar"
+                        class="w-8 h-8 rounded-full border border-gray-300 object-cover"
+                        onerror="this.src='{{ asset('images/default-avatar.png') }}'">
                 </div>
             </div>
         </header>
@@ -132,7 +139,33 @@
         }
     </script>
 
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- ============================================ -->
+    <!-- MODAL YANG TIDAK MEMERLUKAN DATA -->
+    <!-- ============================================ -->
+    @include('components.modal.modal-edit-penyuluh', ['penyuluh' => auth()->user()->penyuluh])
+    @include('components.modal.modal-ubah-foto', ['user' => auth()->user()])
+    @include('components.modal.modal-kth', ['kth' => null, 'mode' => 'create'])
+    @include('components.modal.modal-warning-edit-kth')
+    @include('components.modal.modal-hapus-kth')
+    @include('components.modal.modal-laporan', [
+        'kth' => null,
+        'laporan' => null,
+        'mode' => 'create',
+        'kthOptions' => $kthOptions ?? collect(),
+    ])
+    @include('components.modal.modal-preview-upload')
+    @include('components.modal.modal-warning-laporan')
+    @include('components.modal.modal-hapus-laporan')
+    @include('components.modal.modal-revisi-laporan')
+    @include('components.modal.modal-detail-laporan', ['laporan' => $laporan ?? null])
+
+
     @stack('scripts')
+
 </body>
+
+
 
 </html>
