@@ -1,36 +1,171 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="id">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'SI-KTH Dashboard')</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- Tailwind CSS via Vite -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+</head>
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+<body class="bg-gray-50 font-inter antialiased">
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+    <!-- ======================== SIDEBAR ======================== -->
+    <aside
+        class="bg-white h-screen w-72 flex flex-col fixed left-0 top-0 shadow-sm z-50 transition-transform duration-300"
+        id="sidebar">
+        <div class="px-6 py-6 flex flex-col items-start h-full w-full">
+
+            <!-- Brand / Logo -->
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-emerald-700 rounded-lg flex items-center justify-center text-white">
+                    <span class="icon-[material-symbols--forest-outline] w-5 h-5"></span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-poppins font-bold text-emerald-800">SI-KTH</h1>
+                    @auth
+                        @if (auth()->user()->role == 'admin')
+                            <p class="text-xs font-inter text-gray-500">Admin Panel</p>
+                        @elseif(auth()->user()->role == 'penyuluh')
+                            <p class="text-xs font-inter text-gray-500">Penyuluh Panel</p>
+                        @elseif(auth()->user()->role == 'pimpinan')
+                            <p class="text-xs font-inter text-gray-500">Pimpinan Panel</p>
+                        @endif
+                    @endauth
+
+                </div>
+            </div>
+
+            <!-- Navigasi berdasarkan role (partial) -->
+            <nav class="w-full flex-1 overflow-y-auto">
+                @auth
+                    @if (auth()->user()->role == 'admin')
+                        @include('layouts.sidebar.sidebar-admin')
+                    @elseif(auth()->user()->role == 'penyuluh')
+                        @include('layouts.sidebar.sidebar-penyuluh')
+                    @elseif(auth()->user()->role == 'pimpinan')
+                        @include('layouts.sidebar.sidebar-pimpinan')
+                    @endif
+                @endauth
+            </nav>
+
+            <!-- Bagian bawah: profil & logout -->
+            <div class="mt-auto pt-4 border-t border-gray-200 w-full">
+                <a href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 hover:border-r-4 hover:border-red-600 transition-colors duration-200">
+                    <span class="icon-[material-symbols--logout] w-6 h-6 text-red-600"></span>
+                    <span class="text-sm text-inter font-medium">Logout</span>
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                    @csrf
+                </form>
+            </div>
         </div>
-    </body>
+    </aside>
+
+    <!-- ======================== MAIN CONTENT ======================== -->
+    <main class="ml-72 min-h-screen">
+
+        <!-- Header / Top App Bar -->
+        <header class="h-16 sticky top-0 z-40 bg-white border-b border-gray-200 flex justify-between items-center px-6">
+            <div class="flex items-center gap-4">
+                <button class="flex items-center p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-600"
+                    id="toggleSidebar">
+                    <span class="icon-[material-symbols--menu-rounded] w-6 h-6"></span>
+                </button>
+                @auth
+                    @if (auth()->user()->role == 'admin')
+                        @include('layouts.header.header-admin')
+                    @elseif(auth()->user()->role == 'penyuluh')
+                        @include('layouts.header.header-penyuluh')
+                    @elseif(auth()->user()->role == 'pimpinan')
+                        @include('layouts.header.header-pimpinan')
+                    @endif
+                @endauth
+            </div>
+
+            <div class="flex items-center gap-6">
+
+                <!-- Profil User -->
+                <div class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-poppins font-semibold text-gray-800">{{ auth()->user()->name }}</p>
+                        <p class="text-xs font-inter text-gray-500 capitalize">{{ auth()->user()->role }}</p>
+                    </div>
+                    @php
+                        $fotoProfil = auth()->user()->foto_profil;
+                        $fotoUrl = $fotoProfil ? asset('storage/' . $fotoProfil) : asset('images/default-avatar.png');
+                    @endphp
+
+                    <img src="{{ $fotoUrl }}" alt="Avatar"
+                        class="w-8 h-8 rounded-full border border-gray-300 object-cover"
+                        onerror="this.src='{{ asset('images/default-avatar.png') }}'">
+                </div>
+            </div>
+        </header>
+
+        <!-- Konten Halaman -->
+        <div class="p-6 space-y-6">
+            @yield('content')
+        </div>
+
+    </main>
+
+    <!-- ======================== SCRIPTS ======================== -->
+    <script>
+        // Toggle Sidebar
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const main = document.querySelector('main');
+        let isSidebarVisible = true;
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                if (isSidebarVisible) {
+                    sidebar.style.transform = 'translateX(-100%)';
+                    main.style.marginLeft = '0';
+                } else {
+                    sidebar.style.transform = 'translateX(0)';
+                    main.style.marginLeft = '18rem';
+                }
+                isSidebarVisible = !isSidebarVisible;
+            });
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- ============================================ -->
+    <!-- MODAL YANG TIDAK MEMERLUKAN DATA -->
+    <!-- ============================================ -->
+    @include('components.modal.modal-edit-penyuluh', ['penyuluh' => auth()->user()->penyuluh])
+    @include('components.modal.modal-ubah-foto', ['user' => auth()->user()])
+    @include('components.modal.modal-kth', ['kth' => null, 'mode' => 'create'])
+    @include('components.modal.modal-warning-edit-kth')
+    @include('components.modal.modal-hapus-kth')
+    @include('components.modal.modal-laporan', [
+        'kth' => null,
+        'laporan' => null,
+        'mode' => 'create',
+        'kthOptions' => $kthOptions ?? collect(),
+    ])
+    @include('components.modal.modal-preview-upload')
+    @include('components.modal.modal-warning-laporan')
+    @include('components.modal.modal-hapus-laporan')
+    @include('components.modal.modal-revisi-laporan')
+    @include('components.modal.modal-detail-laporan', ['laporan' => $laporan ?? null])
+
+
+    @stack('scripts')
+
+</body>
+
+
+
 </html>
