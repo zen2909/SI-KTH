@@ -60,45 +60,6 @@
                         </span>
                     @endif
 
-                    {{-- Tombol Buat Laporan --}}
-                    <button type="button"
-                        onclick="window.location.href='{{ route('penyuluh.laporan.create', ['kth_id' => $kth->id]) }}'"
-                        class="flex items-center bg-[#0E4C34] text-white py-2 px-4 gap-2 rounded-lg hover:bg-[#1f4d36] transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
-                            </path>
-                        </svg>
-                        <span class="text-sm font-medium">Buat Laporan Baru</span>
-                    </button>
-
-                    {{-- Tombol Edit --}}
-                    <button type="button"
-                        onclick="closeDetailModal(); openEditKTHModal({{ $kth->id }}, '{{ addslashes($kth->nama_kth ?? '') }}', '{{ $kth->kelas_kth ?? '' }}', '{{ $kth->nomor_register ?? '' }}', '{{ isset($kth->tanggal_register) && $kth->tanggal_register ? \Carbon\Carbon::parse($kth->tanggal_register)->format('Y-m-d') : '' }}', '{{ $kth->kabupaten ?? '' }}', '{{ $kth->kecamatan ?? '' }}', '{{ $kth->desa ?? '' }}', '{{ addslashes($kth->nama_ketua ?? '') }}', '{{ $kth->no_hp_ketua ?? '' }}', '{{ $kth->status_kth ?? '' }}', '{{ $kth->tahun_tidak_aktif ?? '' }}', '{{ $kth->latitude ?? '' }}', '{{ $kth->longitude ?? '' }}')"
-                        class="flex items-center bg-transparent text-[#0E4C34] py-2 px-4 gap-2 rounded-lg border-2 border-[#0E4C34] hover:bg-[#0E4C34] hover:text-white transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                            </path>
-                        </svg>
-                        <span class="text-sm font-medium">Edit KTH</span>
-                    </button>
-
-                    {{-- Tombol Hapus --}}
-                    <form action="{{ route('penyuluh.kth.destroy', $kth->id) }}" method="POST" class="inline"
-                        onsubmit="return confirm('Yakin hapus data KTH ini? Semua laporan terkait akan ikut terhapus.')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                            class="flex items-center bg-transparent text-[#BA1A1A] py-2 px-4 gap-2 rounded-lg border-2 border-[#BA1A1A] hover:bg-[#BA1A1A] hover:text-white transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                </path>
-                            </svg>
-                            <span class="text-sm font-medium">Hapus KTH</span>
-                        </button>
-                    </form>
-
                     {{-- Tombol Close --}}
                     <button type="button" onclick="closeDetailModal()"
                         class="ml-2 text-gray-400 hover:text-gray-600 transition">
@@ -238,7 +199,7 @@
                             <div id="detailMapContainer" style="height: 300px; width: 100%;"></div>
                         </div>
 
-                        {{-- Histori Laporan (STATIS) --}}
+                        {{-- Histori Laporan --}}
                         <div class="flex-1 bg-white rounded-3xl shadow p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center gap-2">
@@ -249,78 +210,89 @@
                                         </path>
                                     </svg>
                                     <span class="text-[#191C1D] text-lg font-semibold">Histori Laporan</span>
+                                    <span class="text-xs text-[#404943] bg-gray-100 px-2 py-0.5 rounded-full">
+                                        {{ $kth->laporanKth->where('status_verifikasi', 'verified')->count() }}
+                                    </span>
                                 </div>
-                                <button type="button" onclick="alert('Lihat semua laporan')"
-                                    class="text-[#0E4C34] text-sm font-medium hover:underline flex items-center gap-1">
-                                    Lihat Semua
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </button>
+                                @if ($kth->laporanKth->where('status_verifikasi', 'verified')->count() > 0)
+                                    <a href="{{ route('penyuluh.laporan.index', ['search' => $kth->nama_kth, 'status_verifikasi' => 'verified']) }}"
+                                        class="text-[#0E4C34] text-sm font-medium hover:underline flex items-center gap-1">
+                                        Lihat Semua
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                @endif
                             </div>
 
-                            {{-- Data Laporan Statis --}}
                             @php
-                                $laporans = [
-                                    [
-                                        'periode' => 'Semester II - 2023',
-                                        'jenis_usaha' => 'Budidaya Jamur & Madu',
-                                        'status' => 'Tervalidasi',
-                                        'tanggal' => '15 Jan 2024',
-                                        'status_class' => 'bg-[#2B644A33] text-[#0E4C34]',
-                                    ],
-                                    [
-                                        'periode' => 'Semester I - 2023',
-                                        'jenis_usaha' => 'Pemanfaatan Kayu',
-                                        'status' => 'Tervalidasi',
-                                        'tanggal' => '10 Jul 2023',
-                                        'status_class' => 'bg-[#2B644A33] text-[#0E4C34]',
-                                    ],
-                                    [
-                                        'periode' => 'Semester II - 2022',
-                                        'jenis_usaha' => 'Jasa Wisata Alam',
-                                        'status' => 'Arsip',
-                                        'tanggal' => '22 Jan 2023',
-                                        'status_class' => 'bg-[#E1E3E4] text-[#404943]',
-                                    ],
-                                ];
+                                // Ambil laporan dengan status verified dan urutkan dari yang terbaru
+                                $verifiedLaporans = $kth->laporanKth
+                                    ->where('status_verifikasi', 'verified')
+                                    ->sortByDesc('periode_laporan')
+                                    ->take(5);
                             @endphp
 
-                            <div class="space-y-2">
-                                {{-- Header Tabel --}}
-                                <div
-                                    class="grid grid-cols-4 gap-2 text-xs font-bold text-[#404943] pb-1 border-b border-gray-100">
-                                    <span>Periode</span>
-                                    <span>Jenis Usaha</span>
-                                    <span>Status</span>
-                                    <span class="text-right">Tanggal</span>
+                            @if ($verifiedLaporans->count() > 0)
+                                <div class="space-y-2">
+                                    {{-- Header Tabel --}}
+                                    <div
+                                        class="grid grid-cols-3 gap-2 text-xs font-bold text-[#404943] pb-1 border-b border-gray-100">
+                                        <span>Periode</span>
+                                        <span>Jenis Usaha</span>
+                                        <span class="text-right">Status</span>
+                                    </div>
+
+                                    {{-- Data Laporan --}}
+                                    @foreach ($verifiedLaporans as $laporan)
+                                        <div
+                                            class="grid grid-cols-3 gap-2 items-center py-1.5 border-b border-gray-50 text-sm hover:bg-gray-50 rounded-lg px-1 transition">
+                                            <span class="text-[#191C1D]">
+                                                {{ $laporan->periode_laporan ? \Carbon\Carbon::parse($laporan->periode_laporan)->format('F Y') : '-' }}
+                                            </span>
+                                            <span class="text-[#191C1D] truncate flex items-center gap-1">
+                                                <svg class="w-3 h-3 text-[#404943] flex-shrink-0" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z">
+                                                    </path>
+                                                </svg>
+                                                <span class="truncate">{{ $laporan->jenis_usaha ?? '-' }}</span>
+                                            </span>
+                                            <span class="text-right">
+                                                <span
+                                                    class="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                                    ✓ Terverifikasi
+                                                </span>
+                                            </span>
+                                        </div>
+                                    @endforeach
                                 </div>
 
-                                {{-- Data Laporan --}}
-                                @foreach ($laporans as $laporan)
-                                    <div
-                                        class="grid grid-cols-4 gap-2 items-center py-1.5 border-b border-gray-50 text-sm">
-                                        <span class="text-[#191C1D]">{{ $laporan['periode'] }}</span>
-                                        <span class="text-[#191C1D] flex items-center gap-1">
-                                            <svg class="w-3 h-3 text-[#404943]" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z">
-                                                </path>
-                                            </svg>
-                                            {{ $laporan['jenis_usaha'] }}
-                                        </span>
-                                        <span>
-                                            <span
-                                                class="inline-block px-2 py-0.5 rounded-full text-xs font-medium {{ $laporan['status_class'] }}">
-                                                {{ $laporan['status'] }}
-                                            </span>
-                                        </span>
-                                        <span class="text-right text-[#404943]">{{ $laporan['tanggal'] }}</span>
+                                {{-- Jika ada lebih dari 5, tampilkan info --}}
+                                @if ($kth->laporanKth->where('status_verifikasi', 'verified')->count() > 5)
+                                    <div class="text-center text-xs text-[#404943] mt-2">
+                                        + {{ $kth->laporanKth->where('status_verifikasi', 'verified')->count() - 5 }}
+                                        laporan lainnya
                                     </div>
-                                @endforeach
-                            </div>
+                                @endif
+                            @else
+                                {{-- Empty State --}}
+                                <div class="flex flex-col items-center justify-center py-8 text-center">
+                                    <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                        </path>
+                                    </svg>
+                                    <p class="text-[#404943] text-sm font-medium">Belum ada laporan terverifikasi</p>
+                                    <p class="text-[#404943] text-xs mt-1">Laporan yang sudah diverifikasi akan muncul
+                                        di sini</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

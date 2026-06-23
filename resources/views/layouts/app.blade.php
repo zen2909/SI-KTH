@@ -7,8 +7,12 @@
     <title>@yield('title', 'SI-KTH Dashboard')</title>
 
     <!-- Tailwind CSS via Vite -->
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@1.0.7/dist/iconify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 </head>
@@ -144,24 +148,50 @@
     <!-- ============================================ -->
     <!-- MODAL YANG TIDAK MEMERLUKAN DATA -->
     <!-- ============================================ -->
-    @include('components.modal.modal-edit-penyuluh', ['penyuluh' => auth()->user()->penyuluh])
-    @include('components.modal.modal-ubah-foto', ['user' => auth()->user()])
-    @include('components.modal.modal-kth', ['kth' => null, 'mode' => 'create'])
-    @include('components.modal.modal-warning-edit-kth')
-    @include('components.modal.modal-hapus-kth')
-    @include('components.modal.modal-laporan', [
+    @include('components.modal.penyuluh.modal-edit-penyuluh', ['penyuluh' => auth()->user()->penyuluh])
+    @include('components.modal.penyuluh.modal-ubah-foto', ['user' => auth()->user()])
+    @include('components.modal.penyuluh.modal-kth', ['kth' => null, 'mode' => 'create'])
+    @include('components.modal.penyuluh.modal-warning-edit-kth')
+    @include('components.modal.penyuluh.modal-hapus-kth')
+    @include('components.modal.penyuluh.modal-laporan', [
         'kth' => null,
         'laporan' => null,
         'mode' => 'create',
         'kthOptions' => $kthOptions ?? collect(),
     ])
-    @include('components.modal.modal-preview-upload')
-    @include('components.modal.modal-warning-laporan')
-    @include('components.modal.modal-hapus-laporan')
-    @include('components.modal.modal-revisi-laporan')
-    @include('components.modal.modal-detail-laporan', ['laporan' => $laporan ?? null])
-
-
+    @include('components.modal.penyuluh.modal-preview-upload')
+    @include('components.modal.penyuluh.modal-warning-laporan')
+    @include('components.modal.penyuluh.modal-hapus-laporan')
+    @include('components.modal.penyuluh.modal-revisi-laporan')
+    @include('components.modal.penyuluh.modal-detail-kth', ['kth' => $kth ?? null])
+    @include('components.modal.penyuluh.modal-detail-laporan', ['laporan' => $laporan ?? null])
+    @include('components.modal.admin.modal-approve-kth')
+    @php
+        $rejectUrl = route('kth.verifikasi.reject', ['id' => 0]);
+    @endphp
+    @include('components.modal.admin.modal-reject-kth', ['rejectUrl' => $rejectUrl])
+    @include('components.modal.admin.modal-detail-kth-verifikasi', ['kth' => $kth ?? null])
+    @include('components.modal.admin.modal-approve-laporan')
+    @include('components.modal.admin.modal-reject-laporan')
+    @include('components.modal.admin.modal-detail-laporan-verifikasi', ['laporan' => $laporan ?? null])
+    @include('components.modal.admin.modal-detail-kth-admin', ['kth' => $kth ?? null])
+    @include('components.modal.admin.modal-hapus-kth-admin')
+    @include('components.modal.admin.modal-hapus-laporan-admin')
+    @include('components.modal.admin.modal-detail-laporan-admin', ['laporan' => $laporan ?? null])
+    @include('components.modal.admin.modal-create-user', ['user' => null, 'mode' => 'create'])
+    @include('components.modal.admin.modal-detail-user')
+    @include('components.modal.admin.modal-detail-penyuluh')
+    @include('components.modal.admin.modal-hapus-user', ['user' => null])
+    @include('components.modal.admin.modal-ubah-foto', ['user' => auth()->user()])
+    @include('components.modal.admin.modal-export-kth', [
+        'totalData' => $totalKTH ?? 0,
+        'kecamatanList' => $kecamatanList ?? [],
+    ])
+    @include('components.modal.admin.modal-export-laporan', [
+        'totalData' => $totalLaporan ?? 0,
+        'tahunList' => $tahunList ?? [],
+    ])
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('scripts')
 
 </body>

@@ -1,5 +1,5 @@
 <dialog id="modalRevisiLaporan"
-    class="w-full max-w-3xl mx-auto rounded-3xl shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm overflow-hidden">
+    class="w-[480px] max-w-[90vw] mx-auto rounded-3xl shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm overflow-hidden">
 
     <div class="bg-white rounded-3xl flex flex-col max-h-[90vh]">
         {{-- Header --}}
@@ -13,7 +13,7 @@
                     </svg>
                     <span class="text-red-800 text-sm font-semibold">Laporan Ditolak</span>
                 </div>
-                <h3 class="text-2xl font-semibold text-zinc-900 font-poppins">Catatan Revisi Laporan</h3>
+                <h3 class="text-xl font-semibold text-zinc-900 font-poppins">Catatan Revisi Laporan</h3>
             </div>
             <button type="button" onclick="closeRevisiLaporanModal()"
                 class="ml-auto text-gray-400 hover:text-gray-600 transition">
@@ -42,7 +42,7 @@
             {{-- Content --}}
             <div id="revisiContent" class="hidden">
                 {{-- Informasi Laporan --}}
-                <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="grid grid-cols-1 gap-3 mb-4">
                     <div class="bg-gray-50 rounded-xl p-4 border border-stone-300/30">
                         <p class="text-neutral-700 text-xs font-medium">Nama KTH</p>
                         <p class="text-emerald-900 text-base font-semibold" id="revisiNamaKTH">-</p>
@@ -54,30 +54,32 @@
                 </div>
 
                 {{-- Catatan Revisi --}}
-                <div class="bg-white rounded-3xl border-l-4 border-red-700 p-6 shadow-sm">
+                <div class="bg-white rounded-3xl border-l-4 border-red-700 p-5 shadow-sm">
                     <div class="flex items-center gap-2 mb-3">
-                        <svg class="w-5 h-5 text-emerald-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-red-700 flex-shrink-0" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
                             </path>
                         </svg>
-                        <span class="text-zinc-900 text-xl font-medium font-poppins">Catatan Admin</span>
+                        <span class="text-zinc-900 text-lg font-medium font-poppins">Catatan Admin</span>
                     </div>
-                    <div class="text-neutral-700 text-base font-normal leading-relaxed" id="revisiCatatan">
+                    <div class="text-neutral-700 text-sm leading-relaxed" id="revisiCatatan">
                         <p class="text-gray-500 italic">Tidak ada catatan revisi dari Admin.</p>
                     </div>
                 </div>
 
                 {{-- Informasi Tambahan --}}
-                <div class="mt-4 p-3 bg-gray-50 rounded-xl border border-stone-300/30">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="mt-4 p-3 bg-blue-50 rounded-xl border border-blue-100">
+                    <div class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
                             </path>
                         </svg>
-                        <span class="text-gray-600 text-sm font-semibold">Status verifikasi akan diperbarui setelah
-                            revisi dikirimkan.</span>
+                        <span class="text-blue-700 text-sm">Status verifikasi akan diperbarui setelah revisi
+                            dikirimkan.</span>
                     </div>
                 </div>
             </div>
@@ -85,25 +87,30 @@
 
         {{-- Footer --}}
         <div
-            class="flex justify-end items-center bg-zinc-100 py-4 px-6 border-t border-stone-300/20 sticky bottom-0 flex-shrink-0">
+            class="flex justify-end items-center bg-zinc-100 py-4 px-6 border-t border-stone-300/20 sticky bottom-0 flex-shrink-0 gap-3">
             <button type="button" onclick="closeRevisiLaporanModal()"
-                class="w-24 h-12 bg-zinc-200 rounded-full text-neutral-700 font-semibold text-sm hover:bg-zinc-300 transition mr-3">
+                class="px-6 h-11 py-3 bg-zinc-200 rounded-full text-neutral-700 font-semibold text-sm hover:bg-zinc-300 transition">
                 Tutup
             </button>
-            <a id="revisiEditLink" href="#"
-                class="inline-flex items-center justify-center w-56 h-12 bg-emerald-900 rounded-full text-white font-semibold text-sm hover:bg-emerald-800 transition gap-2">
-                <svg class="w-5 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button type="button" onclick="bukaEditDariRevisi()"
+                class="inline-flex items-center justify-center px-6 py-3 h-11 bg-emerald-900 rounded-full text-white font-semibold text-sm hover:bg-emerald-800 transition gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
                     </path>
                 </svg>
                 Perbaiki Sekarang
-            </a>
+            </button>
         </div>
     </div>
 </dialog>
 
 <script>
+    // ============================================
+    // VARIABEL GLOBAL
+    // ============================================
+    let revisiLaporanId = null;
+
     // ============================================
     // FUNGSI BUKA MODAL REVISI LAPORAN
     // ============================================
@@ -111,6 +118,9 @@
         const modal = document.getElementById('modalRevisiLaporan');
         const loading = document.getElementById('revisiLoading');
         const content = document.getElementById('revisiContent');
+
+        // Simpan ID laporan
+        revisiLaporanId = laporanId;
 
         // Show loading, hide content
         if (loading) loading.classList.remove('hidden');
@@ -131,7 +141,6 @@
                 const namaKTH = document.getElementById('revisiNamaKTH');
                 const periode = document.getElementById('revisiPeriode');
                 const catatan = document.getElementById('revisiCatatan');
-                const editLink = document.getElementById('revisiEditLink');
 
                 if (namaKTH) namaKTH.textContent = data.nama_kth || '-';
                 if (periode) {
@@ -150,9 +159,6 @@
                             '<p class="text-gray-500 italic">Tidak ada catatan revisi dari Admin.</p>';
                     }
                 }
-                if (editLink) {
-                    editLink.href = `/penyuluh/laporan/${data.id}/edit`;
-                }
 
                 // Hide loading, show content
                 if (loading) loading.classList.add('hidden');
@@ -168,6 +174,31 @@
                         '<p class="text-red-500">Gagal memuat data revisi. Silakan refresh halaman.</p>';
                 }
             });
+    };
+
+    // ============================================
+    // 🔥 FUNGSI BUKA EDIT DARI REVISI
+    // ============================================
+    window.bukaEditDariRevisi = function() {
+        if (!revisiLaporanId) {
+            console.error('ID laporan tidak ditemukan!');
+            return;
+        }
+
+        // Tutup modal revisi
+        closeRevisiLaporanModal();
+
+        // 🔥 Buka modal edit laporan
+        setTimeout(function() {
+            if (typeof openEditLaporanModal === 'function') {
+                openEditLaporanModal(revisiLaporanId);
+            } else if (typeof window.openEditLaporanModal === 'function') {
+                window.openEditLaporanModal(revisiLaporanId);
+            } else {
+                // Fallback: redirect ke halaman edit
+                window.location.href = `/penyuluh/laporan/${revisiLaporanId}/edit`;
+            }
+        }, 200);
     };
 
     // ============================================

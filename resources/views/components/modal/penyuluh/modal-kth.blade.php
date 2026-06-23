@@ -255,7 +255,7 @@
                 Batal
             </button>
             <button type="submit" form="formKTH"
-                class="flex items-center bg-[#0E4C34] text-white py-3 px-8 gap-2 rounded-lg shadow hover:bg-[#1f4d36] transition">
+                class="flex items-center justify-center bg-[#0E4C34] text-white py-3 px-8 gap-2 rounded-lg shadow hover:bg-[#1f4d36] transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
@@ -618,7 +618,7 @@
                 // Ambil status verifikasi dari hidden input
                 const statusVerifikasiInput = document.getElementById('status_verifikasi_hidden');
                 const statusVerifikasi = statusVerifikasiInput ? statusVerifikasiInput.value :
-                'pending';
+                    'pending';
 
                 // Cek apakah mode edit (ada method PUT)
                 const methodInput = form.querySelector('input[name="_method"]');
@@ -679,7 +679,7 @@
                         // Fallback
                         if (confirm(
                                 `Peringatan! Data ini sudah diverifikasi. Perubahan akan mengembalikan status ke Pending. Lanjutkan?`
-                                )) {
+                            )) {
                             form.submit();
                         }
                     }
