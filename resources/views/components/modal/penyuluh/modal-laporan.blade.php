@@ -361,7 +361,7 @@
                     Batal
                 </button>
                 <button type="submit" form="formLaporan"
-                    class="flex items-center gap-2 w-56 h-12 bg-emerald-900 rounded-lg text-white font-semibold hover:bg-emerald-800 transition px-4">
+                    class="flex items-center justify-center gap-2 w-56 h-12 bg-emerald-900 rounded-lg text-white font-semibold hover:bg-emerald-800 transition px-4">
                     <svg class="w-5 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
                         </path>

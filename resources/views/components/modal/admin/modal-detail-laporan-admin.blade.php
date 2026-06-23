@@ -1,7 +1,7 @@
 @props(['laporan' => null])
 
 @if ($laporan)
-    <dialog id="modalDetailLaporan"
+    <dialog id="modalDetailLaporanAdminView"
         class="w-full max-w-6xl mx-auto rounded-3xl shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm overflow-hidden">
 
         <div class="bg-white rounded-3xl flex flex-col max-h-[90vh]">
@@ -10,19 +10,19 @@
                 <div class="flex items-center justify-between py-4 px-6">
                     <div>
                         <div class="flex items-center gap-2 text-sm">
-                            <span class="text-neutral-700">Laporan KTH</span>
+                            <span class="text-neutral-700">Detail Laporan</span>
                             <svg class="w-3 h-3 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
                                 </path>
                             </svg>
-                            <span class="text-emerald-900 font-semibold">Detail Laporan</span>
+                            <span class="text-emerald-900 font-semibold">Informasi Lengkap</span>
                         </div>
                         <h2 class="text-2xl font-semibold text-zinc-900 font-poppins">
                             {{ $laporan->kth->nama_kth ?? 'KTH' }} -
                             {{ $laporan->periode_laporan ? \Carbon\Carbon::parse($laporan->periode_laporan)->format('F Y') : '-' }}
                         </h2>
                     </div>
-                    <button type="button" onclick="closeDetailLaporanModal()"
+                    <button type="button" onclick="closeDetailLaporanAdminView()"
                         class="text-gray-400 hover:text-gray-600 transition">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -35,7 +35,7 @@
 
             {{-- Body --}}
             <div class="overflow-y-auto flex-1 px-6 py-4 bg-gray-50">
-                {{-- Status Revisi jika rejected --}}
+                {{-- Status --}}
                 @if ($laporan->status_verifikasi == 'rejected')
                     <div class="bg-red-50/50 rounded-3xl p-4 mb-4 border border-red-700/10">
                         <div class="flex items-start gap-3">
@@ -57,7 +57,6 @@
                     </div>
                 @endif
 
-                {{-- Status Verified --}}
                 @if ($laporan->status_verifikasi == 'verified')
                     <div class="bg-green-50/50 rounded-3xl p-4 mb-4 border border-green-700/10">
                         <span
@@ -65,7 +64,6 @@
                     </div>
                 @endif
 
-                {{-- Status Pending --}}
                 @if ($laporan->status_verifikasi == 'pending')
                     <div class="bg-yellow-50/50 rounded-3xl p-4 mb-4 border border-yellow-700/10">
                         <span
@@ -132,7 +130,6 @@
 
                                     $satuan = $laporan->satuan_produksi ?? 'Kg';
 
-                                    // Tampilkan nilai lengkap dengan satuan
                                     $potensiDisplay =
                                         $potensiNumeric > 0 ? $potensiNumeric . ' ' . $satuan : '0 ' . $satuan;
                                 @endphp
@@ -256,7 +253,7 @@
                     </div>
                 </div>
 
-                {{-- 🔥 KETERANGAN TAMBAHAN --}}
+                {{-- Keterangan Tambahan --}}
                 @if ($laporan->keterangan_tambahan)
                     <div class="mb-4">
                         <div class="flex items-center gap-2 mb-3">
@@ -413,7 +410,7 @@
                                 class="font-semibold capitalize">{{ $laporan->status_verifikasi ?? 'Pending' }}</span></span>
                     </div>
                     <div class="flex items-center gap-3">
-                        <button type="button" onclick="closeDetailLaporanModal()"
+                        <button type="button" onclick="closeDetailLaporanAdminView()"
                             class="flex items-center gap-2 px-4 py-2 rounded-xl border border-neutral-500 text-neutral-700 text-sm font-semibold hover:bg-neutral-50 transition">
                             <svg class="w-4 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -421,17 +418,20 @@
                             </svg>
                             Kembali
                         </button>
-                        @if ($laporan->status_verifikasi == 'rejected')
-                            <a href="{{ route('penyuluh.laporan.edit', $laporan->id) }}"
-                                class="flex items-center gap-2 px-4 py-2 bg-primary rounded-xl text-white text-sm font-semibold hover:bg-emerald-800 transition shadow">
-                                <svg class="w-4 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                    </path>
-                                </svg>
-                                Edit Laporan
-                            </a>
-                        @endif
+                        <button type="button"
+                            onclick="openHapusLaporanAdminModal(
+                                {{ $laporan->id }}, 
+                                '{{ $laporan->periode_laporan ? $laporan->periode_laporan->format('M Y') : '-' }}', 
+                                '{{ addslashes($laporan->kth->nama_kth ?? '-') }}'
+                            )"
+                            class="flex items-center gap-2 px-4 py-2 bg-red-700 rounded-xl text-white text-sm font-semibold hover:bg-red-800 transition shadow">
+                            <svg class="w-4 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                            Hapus
+                        </button>
                     </div>
                 </div>
             </div>
@@ -440,24 +440,21 @@
 
     <script>
         // ============================================
-        // FUNGSI BUKA MODAL DETAIL LAPORAN
+        // FUNGSI BUKA MODAL DETAIL LAPORAN ADMIN VIEW
         // ============================================
-        window.openDetailLaporanModal = function(laporanId) {
-            console.log('Opening detail modal for laporan ID:', laporanId); // Debug
-            const modal = document.getElementById('modalDetailLaporan');
+        window.openDetailLaporanAdminView = function(laporanId) {
+            const modal = document.getElementById('modalDetailLaporanAdminView');
             if (modal) {
                 modal.showModal();
                 document.body.classList.add('no-scroll');
-            } else {
-                console.error('Modal detail laporan tidak ditemukan!');
             }
         };
 
         // ============================================
-        // FUNGSI TUTUP MODAL DETAIL LAPORAN
+        // FUNGSI TUTUP MODAL DETAIL LAPORAN ADMIN VIEW
         // ============================================
-        function closeDetailLaporanModal() {
-            const modal = document.getElementById('modalDetailLaporan');
+        function closeDetailLaporanAdminView() {
+            const modal = document.getElementById('modalDetailLaporanAdminView');
             if (modal) {
                 modal.close();
                 document.body.classList.remove('no-scroll');
@@ -468,7 +465,7 @@
         // EVENT LISTENER MODAL
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('modalDetailLaporan');
+            const modal = document.getElementById('modalDetailLaporanAdminView');
             if (modal) {
                 modal.addEventListener('close', function() {
                     document.body.classList.remove('no-scroll');
@@ -481,8 +478,9 @@
     </script>
 @else
     {{-- Fallback jika laporan null --}}
-    <dialog id="modalDetailLaporan" class="w-full max-w-md mx-auto rounded-lg shadow-lg p-6 backdrop:bg-black/50">
+    <dialog id="modalDetailLaporanAdminView"
+        class="w-full max-w-md mx-auto rounded-lg shadow-lg p-6 backdrop:bg-black/50">
         <p class="text-red-500 font-semibold">Data laporan tidak ditemukan.</p>
-        <button onclick="closeDetailLaporanModal()" class="mt-4 bg-gray-200 px-4 py-2 rounded">Tutup</button>
+        <button onclick="closeDetailLaporanAdminView()" class="mt-4 bg-gray-200 px-4 py-2 rounded">Tutup</button>
     </dialog>
 @endif

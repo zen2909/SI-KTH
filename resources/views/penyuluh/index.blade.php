@@ -7,7 +7,7 @@
         {{-- Judul --}}
         <div class="mb-2">
             <h1 class="text-2xl font-bold text-primary font-poppins">
-                Selamat datang, {{ Auth::user()->name }} 👋
+                Selamat datang, {{ Auth::user()->penyuluh->nama_lengkap }}
             </h1>
             <p class="text-sm text-primary font-semibold font-normal mt-1">
                 Pantau aktivitas KTH binaan Anda dan kelola laporan terbaru di sini.
