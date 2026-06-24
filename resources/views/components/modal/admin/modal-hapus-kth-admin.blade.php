@@ -1,5 +1,3 @@
-@props(['kth' => null])
-
 <dialog id="modalHapusKTHAdmin"
     class="w-[380px] mx-auto rounded-2xl shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm overflow-hidden">
 
@@ -46,7 +44,7 @@
                 <div>
                     <p class="text-[9px] font-medium text-neutral-500 uppercase tracking-wider">Identitas Target</p>
                     <p class="text-xs font-semibold text-zinc-900" id="targetNamaKTHAdmin">
-                        {{ $kth->nama_kth ?? 'Data KTH' }}
+                        Data KTH
                     </p>
                 </div>
             </div>
@@ -78,42 +76,80 @@
     // ============================================
     // FUNGSI BUKA MODAL HAPUS ADMIN
     // ============================================
-    window.openHapusKTHAdminModal = function(kthId, namaKth) {
-        const modal = document.getElementById('modalHapusKTHAdmin');
-        const targetElement = document.getElementById('targetNamaKTHAdmin');
-        const form = document.getElementById('formHapusKTHAdmin');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Definisikan fungsi setelah DOM siap
+        window.openHapusKTHAdminModal = function(kthId, namaKth) {
+            console.log('🔥 Function called with:', kthId, namaKth);
 
-        // Update nama KTH
-        if (targetElement) {
-            targetElement.textContent = namaKth || 'Data KTH';
-        }
+            // Cari modal dengan cara yang lebih baik
+            const modal = document.getElementById('modalHapusKTHAdmin');
+            console.log('📦 Modal found:', modal);
 
-        // Set action form dengan route admin
-        if (form) {
-            // Gunakan route name 'kth.destroy' sesuai dengan route di web.php
-            const url = "{{ route('kth.destroy', ['id' => ':id']) }}".replace(':id', kthId);
-            form.action = url;
-        }
+            if (!modal) {
+                console.error('❌ Modal not found!');
+                // Fallback ke confirm
+                if (confirm('Apakah Anda yakin ingin menghapus KTH "' + namaKth + '"?')) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/admin/kth/' + kthId;
+                    form.innerHTML = `
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="_method" value="DELETE">
+                    `;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+                return;
+            }
 
-        if (modal) {
-            modal.showModal();
-            document.body.classList.add('no-scroll');
-        }
-    };
+            const targetElement = document.getElementById('targetNamaKTHAdmin');
+            const form = document.getElementById('formHapusKTHAdmin');
+
+            if (targetElement) {
+                targetElement.textContent = namaKth || 'Data KTH';
+            }
+
+            if (form) {
+                form.action = '/admin/kth/' + kthId;
+                console.log('📝 Form action set to:', form.action);
+            }
+
+            // Gunakan try-catch untuk menangani error
+            try {
+                modal.showModal();
+                document.body.classList.add('no-scroll');
+                console.log('✅ Modal opened successfully');
+            } catch (error) {
+                console.error('❌ Error showing modal:', error);
+                // Fallback ke confirm jika modal gagal
+                if (confirm('Apakah Anda yakin ingin menghapus KTH "' + namaKth + '"?')) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/admin/kth/' + kthId;
+                    form.innerHTML = `
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="_method" value="DELETE">
+                    `;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            }
+        };
+    });
 
     // ============================================
     // FUNGSI TUTUP MODAL HAPUS ADMIN
     // ============================================
-    function closeHapusAdminModal() {
+    window.closeHapusAdminModal = function() {
         const modal = document.getElementById('modalHapusKTHAdmin');
         if (modal) {
             modal.close();
             document.body.classList.remove('no-scroll');
         }
-    }
+    };
 
     // ============================================
-    // EVENT LISTENER MODAL
+    // EVENT LISTENER
     // ============================================
     document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('modalHapusKTHAdmin');

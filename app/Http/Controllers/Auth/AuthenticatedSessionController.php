@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -16,7 +17,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        return view('auth.login-penyuluh');
     }
 
     /**
@@ -30,16 +31,31 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        if ($user->role == 'admin') {
-            return redirect()->intended(route('admin.dashboard', absolute: false));
-        } elseif ($user->role == 'penyuluh') {
-            return redirect()->intended(route('penyuluh.dashboard', absolute: false));
-        } elseif ($user->role == 'pimpinan') {
-            return redirect()->intended(route('pimpinan.dashboard', absolute: false));
+        // Cek role dari user yang login
+        $requestedRole = $request->input('role'); // Ambil role dari form
+
+        // Jika role tidak sesuai, logout dan beri error
+        if ($user->role !== $requestedRole) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return back()->withErrors([
+                'email' => 'Anda tidak memiliki akses ke halaman ini.',
+            ]);
         }
 
-        // Fallback jika role tidak dikenal
-        return redirect()->intended(route('login', absolute: false));
+        // Redirect berdasarkan role
+        switch ($user->role) {
+            case 'admin':
+                return redirect()->intended(route('admin.dashboard'));
+            case 'pimpinan':
+                return redirect()->intended(route('pimpinan.dashboard'));
+            case 'penyuluh':
+                return redirect()->intended(route('penyuluh.dashboard'));
+            default:
+                return redirect('/');
+        }
     }
 
     /**
@@ -47,12 +63,25 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // Simpan role sebelum logout
+        $role = Auth::user()->role;
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // Redirect berdasarkan role yang logout
+        switch ($role) {
+            case 'admin':
+                return redirect()->route('login.admin');
+            case 'pimpinan':
+                return redirect()->route('login.pimpinan');
+            case 'penyuluh':
+                return redirect()->route('login.penyuluh');
+            default:
+                return redirect('/');
+        }
     }
 }

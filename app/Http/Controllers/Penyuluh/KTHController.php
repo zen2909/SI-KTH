@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Penyuluh;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Penyuluh\StoreKTHRequest;
 use App\Http\Requests\Penyuluh\UpdateKTHRequest;
+use App\Models\Penyuluh;
+use Illuminate\Http\Request;
 use App\Models\Kth;
 
 class KTHController extends Controller
@@ -12,13 +14,59 @@ class KTHController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+     public function index(Request $request)
     {
-        $kths = Kth::where('id_penyuluh', auth()->user()->penyuluh->id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = Kth::with('penyuluh');
 
-        return view('penyuluh.kth', compact('kths'));
+        // Filter pencarian
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_kth', 'like', "%{$search}%")
+                  ->orWhere('desa', 'like', "%{$search}%")
+                  ->orWhere('kecamatan', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter status verifikasi
+        if ($request->filled('status_verifikasi')) {
+            $query->where('status_verifikasi', $request->status_verifikasi);
+        }
+
+        // Filter status KTH
+        if ($request->filled('status_kth')) {
+            $query->where('status_kth', $request->status_kth);
+        }
+
+        // Filter kelas KTH
+        if ($request->filled('kelas_kth')) {
+            $query->where('kelas_kth', $request->kelas_kth);
+        }
+
+        // Filter kecamatan
+        if ($request->filled('kecamatan')) {
+            $query->where('kecamatan', 'like', "%{$request->kecamatan}%");
+        }
+
+        $kths = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        // Statistik
+        $totalKTH = Kth::count();
+        $totalVerified = Kth::where('status_verifikasi', 'verified')->count();
+        $totalPending = Kth::where('status_verifikasi', 'pending')->count();
+        $totalRejected = Kth::where('status_verifikasi', 'rejected')->count();
+
+        // Data untuk filter dropdown
+        $kecamatanList = Kth::select('kecamatan')->distinct()->pluck('kecamatan');
+
+        return view('penyuluh.kth', compact(
+            'kths',
+            'totalKTH',
+            'totalVerified',
+            'totalPending',
+            'totalRejected',
+            'kecamatanList'
+        ));
     }
 
     /**
@@ -44,15 +92,11 @@ class KTHController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Kth $kth)
-    {
-        // Cek kepemilikan data
-        if ($kth->id_penyuluh !== auth()->user()->penyuluh->id) {
-            abort(403, 'Anda tidak memiliki akses ke data ini.');
-        }
-
-        return view('penyuluh.kth.show', compact('kth'));
-    }
+ public function show($id)
+{
+    $kth = Kth::with(['penyuluh', 'laporanKth'])->findOrFail($id);
+    return response()->json($kth);
+}
 
     /**
      * Show the form for editing the specified resource.

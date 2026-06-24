@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'SI-KTH Dashboard')</title>
 
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <meta name="msapplication-TileColor" content="#165b33">
+    <meta name="theme-color" content="#165b33">
+
+
     <!-- Tailwind CSS via Vite -->
     {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -27,8 +36,9 @@
 
             <!-- Brand / Logo -->
             <div class="flex items-center gap-3 mb-8">
-                <div class="w-10 h-10 bg-emerald-700 rounded-lg flex items-center justify-center text-white">
-                    <span class="icon-[material-symbols--forest-outline] w-5 h-5"></span>
+                <div class="w-14 h-14 bg-emerald-700 rounded-lg flex items-center justify-center overflow-hidden">
+                    <img src="{{ asset('images/logo-jatim.png') }}" class="w-full h-full object-contain p-1"
+                        alt="logo-jatim">
                 </div>
                 <div>
                     <h1 class="text-xl font-poppins font-bold text-emerald-800">SI-KTH</h1>
@@ -163,7 +173,7 @@
     @include('components.modal.penyuluh.modal-warning-laporan')
     @include('components.modal.penyuluh.modal-hapus-laporan')
     @include('components.modal.penyuluh.modal-revisi-laporan')
-    @include('components.modal.penyuluh.modal-detail-kth', ['kth' => $kth ?? null])
+
     @include('components.modal.penyuluh.modal-detail-laporan', ['laporan' => $laporan ?? null])
     @include('components.modal.admin.modal-approve-kth')
     @php
@@ -174,8 +184,8 @@
     @include('components.modal.admin.modal-approve-laporan')
     @include('components.modal.admin.modal-reject-laporan')
     @include('components.modal.admin.modal-detail-laporan-verifikasi', ['laporan' => $laporan ?? null])
-    @include('components.modal.admin.modal-detail-kth-admin', ['kth' => $kth ?? null])
-    @include('components.modal.admin.modal-hapus-kth-admin')
+
+    @include('components.modal.admin.modal-hapus-kth-admin', ['kth' => null])
     @include('components.modal.admin.modal-hapus-laporan-admin')
     @include('components.modal.admin.modal-detail-laporan-admin', ['laporan' => $laporan ?? null])
     @include('components.modal.admin.modal-create-user', ['user' => null, 'mode' => 'create'])
@@ -191,6 +201,18 @@
         'totalData' => $totalLaporan ?? 0,
         'tahunList' => $tahunList ?? [],
     ])
+
+    @include('components.modal.pimpinan.modal-detail-laporan', ['laporan' => $laporan ?? null])
+    @include('components.modal.pimpinan.modal-export-kth', [
+        'totalData' => $totalKTH ?? 0,
+        'kecamatanList' => $kecamatanList ?? [],
+    ])
+    @include('components.modal.pimpinan.modal-export-laporan', [
+        'totalData' => $totalLaporan ?? 0,
+        'tahunList' => $tahunList ?? [],
+    ])
+    @include('components.modal.pimpinan.modal-ubah-foto', ['user' => auth()->user()])
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('scripts')
 

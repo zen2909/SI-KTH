@@ -83,35 +83,58 @@
                                             Sekretariat & Administrasi
                                         </h3>
                                         <div class="flex items-center gap-2">
-                                            @php
-                                                $statusVerifikasi = $kth->status_verifikasi ?? 'pending';
-                                                $statusBadge =
-                                                    [
-                                                        'pending' => 'bg-yellow-100 text-yellow-800',
-                                                        'verified' => 'bg-green-100 text-green-800',
-                                                        'rejected' => 'bg-red-100 text-red-800',
-                                                    ][$statusVerifikasi] ?? 'bg-gray-100 text-gray-800';
-                                                $dotColor =
-                                                    [
-                                                        'pending' => 'bg-yellow-500',
-                                                        'verified' => 'bg-green-500',
-                                                        'rejected' => 'bg-red-500',
-                                                    ][$statusVerifikasi] ?? 'bg-gray-500';
-                                            @endphp
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold {{ $statusBadge }}">
-                                                <span class="w-2 h-2 rounded-full {{ $dotColor }}"></span>
-                                                {{ ucfirst($statusVerifikasi) }}
-                                            </span>
-                                            @if (($kth->status_kth ?? '') == 'Aktif')
+                                            @if ($kth->status_verifikasi == 'verified')
                                                 <span
-                                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-200 text-primary">
-                                                    Active
+                                                    class="px-2 py-1 bg-primary/10 rounded-lg inline-flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5 text-primary" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    <span
+                                                        class="text-primary text-xs font-semibold font-inter leading-4">Verified</span>
+                                                </span>
+                                            @elseif($kth->status_verifikasi == 'pending')
+                                                <span
+                                                    class="px-2 py-1 bg-amber-100 rounded-lg inline-flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5 text-amber-800" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    <span
+                                                        class="text-amber-800 text-xs font-semibold font-inter leading-4">Pending</span>
                                                 </span>
                                             @else
                                                 <span
-                                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-red-200 text-red-600">
-                                                    Non-Active
+                                                    class="px-2 py-1 bg-red-100 rounded-lg inline-flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5 text-red-800" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    <span
+                                                        class="text-red-800 text-xs font-semibold font-inter leading-4">Rejected</span>
+                                                </span>
+                                            @endif
+
+                                            @if ($kth->status_kth == 'Aktif')
+                                                <span
+                                                    class="px-2.5 py-0.5 bg-green-100 rounded-full inline-flex items-center gap-1.5">
+                                                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                                    <span
+                                                        class="text-green-800 text-xs font-medium font-inter leading-4">Aktif</span>
+                                                </span>
+                                            @else
+                                                <span
+                                                    class="px-2.5 py-0.5 bg-slate-100 rounded-full inline-flex items-center gap-1.5">
+                                                    <span class="w-1.5 h-1.5 bg-slate-400 rounded-full"></span>
+                                                    <span
+                                                        class="text-slate-600 text-xs font-medium font-inter leading-4">Tidak
+                                                        Aktif</span>
                                                 </span>
                                             @endif
                                         </div>
@@ -376,43 +399,69 @@
 
     <script>
         // ============================================
-        // LEAFLET MAP untuk Detail Verifikasi
+        // LEAFLET MAP untuk Detail Verifikasi Admin
         // ============================================
         let verifikasiDetailMap = null;
         let verifikasiDetailMarker = null;
 
         function initVerifikasiDetailMap(lat, lng) {
-            const container = document.getElementById('verifikasiDetailMapContainer');
-            if (!container) return;
+            const container = document.getElementById('detailKTHAdminMapContainer');
+            if (!container) {
+                console.warn('Map container not found');
+                return;
+            }
+
+            if (container.offsetParent === null) {
+                console.warn('Map container is hidden');
+                return;
+            }
 
             const defaultLat = lat || -7.0;
             const defaultLng = lng || 113.0;
 
-            if (verifikasiDetailMap) {
-                verifikasiDetailMap.remove();
-                verifikasiDetailMap = null;
-                verifikasiDetailMarker = null;
-            }
-
-            verifikasiDetailMap = L.map(container).setView([defaultLat, defaultLng], 13);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(verifikasiDetailMap);
-
-            if (lat && lng) {
-                verifikasiDetailMarker = L.marker([lat, lng], {
-                    draggable: false
-                }).addTo(verifikasiDetailMap);
-            }
-
-            setTimeout(() => {
+            try {
                 if (verifikasiDetailMap) {
-                    verifikasiDetailMap.invalidateSize();
+                    verifikasiDetailMap.remove();
+                    verifikasiDetailMap = null;
+                    verifikasiDetailMarker = null;
                 }
-            }, 300);
+
+                verifikasiDetailMap = L.map(container, {
+                    center: [defaultLat, defaultLng],
+                    zoom: 13,
+                    zoomControl: true
+                });
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(verifikasiDetailMap);
+
+                if (lat && lng) {
+                    verifikasiDetailMarker = L.marker([lat, lng], {
+                        draggable: false
+                    }).addTo(verifikasiDetailMap);
+                }
+
+                setTimeout(() => {
+                    if (verifikasiDetailMap) {
+                        verifikasiDetailMap.invalidateSize();
+                    }
+                }, 500);
+            } catch (error) {
+                console.error('Error initializing map:', error);
+            }
         }
 
+        // ============================================
+        // FUNGSI BUKA PETA FULLSCREEN
+        // ============================================
+        function openFullMapAdmin() {
+            const lat = {{ $kth->latitude ?? 'null' }};
+            const lng = {{ $kth->longitude ?? 'null' }};
+            if (lat && lng) {
+                window.open(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}&zoom=15`, '_blank');
+            }
+        }
         // ============================================
         // FUNGSI BUKA DETAIL MODAL
         // ============================================

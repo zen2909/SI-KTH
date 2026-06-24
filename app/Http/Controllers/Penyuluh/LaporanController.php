@@ -15,36 +15,55 @@ class LaporanController extends Controller
 {
     public function index(Request $request)
     {
-        $user = auth()->user();
-        $penyuluh = $user->penyuluh;
+        $query = LaporanKth::with(['kth', 'penyuluh']);
 
-        // Ambil KTH yang valid untuk dropdown
-        $kthOptions = Kth::where('id_penyuluh', $penyuluh->id)
-            ->whereIn('status_verifikasi', ['pending', 'verified'])
-            ->orderBy('nama_kth')
-            ->get(['id', 'nama_kth']);
-
-        $query = LaporanKth::where('id_penyuluh', $penyuluh->id)
-            ->with('kth');
-
+        // Filter pencarian
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('kth', function ($q) use ($search) {
-                $q->where('nama_kth', 'like', "%{$search}%");
-            })->orWhere('id', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('jenis_usaha', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%")
+                  ->orWhereHas('kth', function ($q) use ($search) {
+                      $q->where('nama_kth', 'like', "%{$search}%");
+                  });
+            });
         }
 
-        if ($request->filled('status_verifikasi')) {
-            $query->where('status_verifikasi', $request->status_verifikasi);
+        // Filter status_verifikasi
+        if ($request->filled('status')) {
+            $query->where('status_verifikasi', $request->status);
         }
 
+        // Filter periode (tahun) - Perbaikan untuk PostgreSQL
         if ($request->filled('periode')) {
-            $query->where('periode_laporan', $request->periode);
+            $query->whereRaw('EXTRACT(YEAR FROM periode_laporan) = ?', [$request->periode]);
         }
 
         $laporans = $query->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('penyuluh.laporan', compact('laporans', 'kthOptions'));
+        // Statistik
+        $totalLaporan = LaporanKth::count();
+        $totalVerified = LaporanKth::where('status_verifikasi', 'verified')->count();
+        $totalPending = LaporanKth::where('status_verifikasi', 'pending')->count();
+        $totalRejected = LaporanKth::where('status_verifikasi', 'rejected')->count();
+
+        // Data untuk filter dropdown (tahun dari periode_laporan) - Perbaikan untuk PostgreSQL
+        $tahunList = LaporanKth::selectRaw('DISTINCT EXTRACT(YEAR FROM periode_laporan) as tahun')
+            ->whereNotNull('periode_laporan')
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun')
+            ->map(function ($item) {
+                return (int) $item;
+            });
+
+        return view('penyuluh.laporan', compact(
+            'laporans',
+            'totalLaporan',
+            'totalVerified',
+            'totalPending',
+            'totalRejected',
+            'tahunList'
+        ));
     }
 
     public function store(StoreLaporanRequest $request)

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar KTH')
+@section('title', 'Monitoring KTH')
 
 @section('content')
     <div class="w-full space-y-6">
@@ -8,20 +8,18 @@
         <div class="flex flex-wrap items-end justify-between gap-4">
             <div>
                 <h1 class="text-3xl font-semibold text-primary font-poppins">Daftar Kelompok Tani Hutan</h1>
-                <p class="text-base text-neutral-700 font-inter mt-1">Manajemen dan monitoring seluruh Kelompok Tani Hutan
-                    secara komprehensif.</p>
+                <p class="text-base text-neutral-700 font-inter mt-1">Monitoring seluruh Kelompok Tani Hutan secara
+                    komprehensif.</p>
             </div>
-            <div class="flex items-center gap-3">
-                <button type="button" onclick="openModalExportKTH()"
-                    class="flex items-center gap-2 px-6 py-3 bg-emerald-900 rounded-xl text-white hover:bg-emerald-800 transition shadow">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4">
-                        </path>
-                    </svg>
-                    <span>Export Data</span>
-                </button>
-            </div>
+            <button type="button" onclick="openModalExportKTHPimpinan()"
+                class="flex items-center gap-2 px-6 py-3 bg-emerald-900 rounded-xl text-white hover:bg-emerald-800 transition shadow">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4">
+                    </path>
+                </svg>
+                <span>Export Data</span>
+            </button>
         </div>
 
         <!-- Statistik Cards -->
@@ -118,8 +116,8 @@
         </div>
 
         <!-- Filter Section -->
-        <div class="bg-white rounded-3xl shadow-sm border border-stone-300/30 p-6 mb-6">
-            <form action="{{ route('kth.index') }}" method="GET" class="flex flex-wrap items-end gap-4">
+        <div class="bg-white rounded-3xl shadow-sm border border-stone-300/30 p-6">
+            <form action="{{ route('pimpinan.kth.index') }}" method="GET" class="flex flex-wrap items-end gap-4">
                 <!-- Cari KTH -->
                 <div class="flex-1 min-w-[180px]">
                     <label class="block text-neutral-700 text-sm font-normal font-inter mb-2">
@@ -196,13 +194,13 @@
                     </select>
                 </div>
 
-                <!-- Tombol Aksi (sejajar ke samping) -->
+                <!-- Tombol Aksi -->
                 <div class="flex items-end gap-3 min-w-[200px]">
                     <button type="submit"
                         class="px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-emerald-800 transition-colors whitespace-nowrap">
                         Terapkan Filter
                     </button>
-                    <a href="{{ route('kth.index') }}"
+                    <a href="{{ route('pimpinan.kth.index') }}"
                         class="px-6 py-3 bg-gray-200 text-neutral-700 rounded-xl font-medium hover:bg-gray-300 transition-colors whitespace-nowrap">
                         Reset
                     </a>
@@ -237,7 +235,8 @@
                                     class="text-primary text-sm font-bold font-inter uppercase tracking-wide">Kecamatan</span>
                             </th>
                             <th class="px-6 py-4 text-center min-w-[100px]">
-                                <span class="text-primary text-sm font-bold font-inter uppercase tracking-wide">Aksi</span>
+                                <span
+                                    class="text-primary text-sm font-bold font-inter uppercase tracking-wide">Detail</span>
                             </th>
                         </tr>
                     </thead>
@@ -249,7 +248,8 @@
                                     <div class="flex items-center gap-3">
                                         <div>
                                             <div class="text-zinc-900 text-sm font-normal font-inter">
-                                                {{ $kth->nama_kth }}</div>
+                                                {{ $kth->nama_kth }}
+                                            </div>
                                             <div class="text-neutral-700 text-xs font-normal font-inter leading-4">
                                                 Desa {{ $kth->desa }}, {{ $kth->kecamatan }}
                                             </div>
@@ -282,7 +282,7 @@
                                 </td>
 
                                 <!-- Status KTH -->
-                                <td class="text-center px-6 py-4">
+                                <td class="text-center text-centerpx-6 py-4">
                                     @if ($kth->status_kth == 'Aktif')
                                         <span
                                             class="px-2.5 py-0.5 bg-green-100 rounded-full inline-flex items-center gap-1.5">
@@ -322,7 +322,7 @@
                                                     clip-rule="evenodd" />
                                             </svg>
                                             <span
-                                                class="text-amber-800 text-xs font-semibold font-inter leading-4">Menunggu</span>
+                                                class="text-amber-800 text-xs font-semibold font-inter leading-4">Pending</span>
                                         </span>
                                     @else
                                         <span class="px-2 py-1 bg-red-100 rounded-lg inline-flex items-center gap-1">
@@ -333,7 +333,7 @@
                                                     clip-rule="evenodd" />
                                             </svg>
                                             <span
-                                                class="text-red-800 text-xs font-semibold font-inter leading-4">Ditolak</span>
+                                                class="text-red-800 text-xs font-semibold font-inter leading-4">Rejected</span>
                                         </span>
                                     @endif
                                 </td>
@@ -344,27 +344,16 @@
                                         class="text-neutral-700 text-sm font-normal font-inter">{{ $kth->kecamatan }}</span>
                                 </td>
 
-                                <!-- Aksi -->
+                                <!-- Detail -->
                                 <td class="px-6 py-4">
-                                    <div class="flex justify-center items-center gap-2">
-                                        <button type="button" onclick="openDetailKTHAdminModal({{ $kth->id }})"
+                                    <div class="flex justify-center items-center">
+                                        <button type="button" onclick="openDetailKTHPimpinanModal({{ $kth->id }})"
                                             class="text-neutral hover:outline-2 hover:outline-yellow-500 hover:text-yellow-500 hover:bg-neutral bg-yellow-500 rounded-lg p-2 transition-all duration-200"
                                             title="Lihat Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24">
                                                 <path d="M0 0h24v24H0z" fill="none" />
                                                 <path fill="currentColor"
                                                     d="M12 9a3 3 0 0 1 3 3a3 3 0 0 1-3 3a3 3 0 0 1-3-3a3 3 0 0 1 3-3m0-4.5c5 0 9.27 3.11 11 7.5c-1.73 4.39-6 7.5-11 7.5S2.73 16.39 1 12c1.73-4.39 6-7.5 11-7.5M3.18 12a9.821 9.821 0 0 0 17.64 0a9.821 9.821 0 0 0-17.64 0" />
-                                            </svg>
-                                        </button>
-                                        <button type="button"
-                                            onclick="window.openHapusKTHAdminModal({{ $kth->id }}, '{{ addslashes($kth->nama_kth) }}')"
-                                            class="text-neutral hover:outline-2 hover:outline-red-600 hover:bg-neutral bg-red-600 rounded-lg p-2 transition-all duration-200 hover:text-red-600 pt-1.5"
-                                            title="Hapus">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                </path>
                                             </svg>
                                         </button>
                                     </div>
@@ -402,6 +391,6 @@
         </div>
     </div>
 
-    @include('components.modal.admin.modal-detail-kth-admin', ['kth' => $kth ?? null])
+    @include('components.modal.pimpinan.modal-detail-kth', ['kth' => $kth ?? null])
 
 @endsection

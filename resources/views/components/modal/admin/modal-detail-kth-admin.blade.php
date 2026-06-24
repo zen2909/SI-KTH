@@ -13,14 +13,12 @@
                             Detail Kelompok Tani Hutan
                         </h2>
                         <div class="flex items-center gap-3 mt-1">
-                            <span class="text-primary text-xl font-bold font-['Poppins']">
+                            <span class="text-primary text-xl font-bold font-['Poppins']" id="adminKTHNamaHeader">
                                 {{ $kth->nama_kth ?? '-' }}
                             </span>
-
                         </div>
                     </div>
-                    <div
-                        class="flex justify-end items-center gap-3 bg-white py-4 px-8 border-t border-gray-100 sticky bottom-0 flex-shrink-0">
+                    <div class="flex justify-end items-center gap-3">
                         <button type="button" onclick="closeDetailKTHAdminModal()"
                             class="px-6 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-600 hover:text-white font-semibold text-sm transition-all duration-200">
                             Tutup
@@ -48,7 +46,8 @@
                                 <div class="text-neutral-600 text-xs font-semibold font-inter uppercase tracking-wider">
                                     Nama Kelompok
                                 </div>
-                                <div class="text-primary text-lg font-bold font-['Poppins'] mt-1 break-words">
+                                <div class="text-primary text-lg font-bold font-['Poppins'] mt-1 break-words"
+                                    id="adminKTHNamaCard">
                                     {{ $kth->nama_kth ?? '-' }}
                                 </div>
                             </div>
@@ -58,7 +57,7 @@
                                 <div class="text-neutral-600 text-xs font-semibold font-inter uppercase tracking-wider">
                                     Kelas KTH
                                 </div>
-                                <div class="text-zinc-900 text-lg font-bold font-['Poppins'] mt-1">
+                                <div class="text-zinc-900 text-lg font-bold font-['Poppins'] mt-1" id="adminKTHKelas">
                                     {{ $kth->kelas_kth ?? '-' }}
                                 </div>
                             </div>
@@ -68,7 +67,8 @@
                                 <div class="text-neutral-600 text-xs font-semibold font-inter uppercase tracking-wider">
                                     Nomor Registrasi
                                 </div>
-                                <div class="text-zinc-900 text-lg font-bold font-['Poppins'] mt-1 break-words">
+                                <div class="text-zinc-900 text-lg font-bold font-['Poppins'] mt-1 break-words"
+                                    id="adminKTHRegistrasi">
                                     {{ $kth->nomor_register ?? '-' }}
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                                 <div class="text-neutral-600 text-xs font-semibold font-inter uppercase tracking-wider">
                                     Tanggal Terdaftar
                                 </div>
-                                <div class="text-zinc-900 text-lg font-bold font-['Poppins'] mt-1">
+                                <div class="text-zinc-900 text-lg font-bold font-['Poppins'] mt-1" id="adminKTHTanggal">
                                     {{ isset($kth->tanggal_register) && $kth->tanggal_register ? \Carbon\Carbon::parse($kth->tanggal_register)->format('d M Y') : '-' }}
                                 </div>
                             </div>
@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="grid grid-cols-10 gap-4">
-                        {{-- Kolom Kiri (30% = 3 dari 10) --}}
+                        {{-- Kolom Kiri --}}
                         <div class="col-span-7 rounded">
                             <div class="flex-col">
                                 <div class="flex-2 bg-white rounded-2xl shadow-sm p-6">
@@ -140,8 +140,8 @@
                                                         class="text-neutral-600 text-xs font-semibold font-inter uppercase tracking-wider">
                                                         Alamat Sekretariat
                                                     </div>
-                                                    <div
-                                                        class="text-zinc-900 text-base font-normal font-inter mt-1 leading-relaxed">
+                                                    <div class="text-zinc-900 text-base font-normal font-inter mt-1 leading-relaxed"
+                                                        id="adminKTHAlamat">
                                                         {{ $kth->alamat ?? ($kth->desa ?? '-') }},<br>
                                                         Kec. {{ $kth->kecamatan ?? '-' }},
                                                         Kab. {{ $kth->kabupaten ?? '-' }}
@@ -154,8 +154,8 @@
                                                             class="text-neutral-600 text-xs font-semibold font-inter uppercase tracking-wider">
                                                             Latitude
                                                         </div>
-                                                        <div
-                                                            class="text-emerald-900 text-base font-bold font-inter mt-1">
+                                                        <div class="text-emerald-900 text-base font-bold font-inter mt-1"
+                                                            id="adminKTHLatitude">
                                                             {{ $kth->latitude ?? '-' }}
                                                         </div>
                                                     </div>
@@ -164,8 +164,8 @@
                                                             class="text-neutral-600 text-xs font-semibold font-inter uppercase tracking-wider">
                                                             Longitude
                                                         </div>
-                                                        <div
-                                                            class="text-emerald-900 text-base font-bold font-inter mt-1">
+                                                        <div class="text-emerald-900 text-base font-bold font-inter mt-1"
+                                                            id="adminKTHLongitude">
                                                             {{ $kth->longitude ?? '-' }}
                                                         </div>
                                                     </div>
@@ -173,10 +173,9 @@
                                             </div>
 
                                             {{-- Kolom Kanan: Map --}}
-
                                             <div class="relative rounded-xl overflow-hidden border border-gray-200"
                                                 style="height: 180px; width: 100%;">
-                                                <div id="detailKTHAdminMapContainer" style="height: 100%; width: 100%;">
+                                                <div id="adminDetailMapContainer" style="height: 100%; width: 100%;">
                                                 </div>
                                                 @if ($kth->latitude && $kth->longitude)
                                                     <div class="absolute inset-0 flex items-center justify-center">
@@ -221,7 +220,7 @@
                                                     </th>
                                                     <th
                                                         class="px-4 py-3 text-left text-neutral-600 text-xs font-semibold font-inter uppercase tracking-wider">
-                                                        Tanggal
+                                                        NTE / Bulan
                                                     </th>
                                                     <th
                                                         class="px-4 py-3 text-left text-neutral-600 text-xs font-semibold font-inter uppercase tracking-wider">
@@ -229,29 +228,46 @@
                                                     </th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                @forelse(($kth->laporan ?? []) as $laporan)
+                                            <tbody id="adminKTHLaporanBody">
+                                                @php
+                                                    $laporans = $kth->laporanKth ?? collect();
+                                                @endphp
+                                                @forelse($laporans as $laporan)
                                                     <tr class="border-b border-gray-100 hover:bg-gray-50/50">
                                                         <td
                                                             class="px-4 py-3 text-zinc-900 text-sm font-normal font-inter">
-                                                            {{ $laporan['periode'] ?? '-' }}
+                                                            {{ $laporan->periode_laporan ? $laporan->periode_laporan->format('M Y') : '-' }}
                                                         </td>
                                                         <td
                                                             class="px-4 py-3 text-zinc-900 text-sm font-normal font-inter">
-                                                            {{ $laporan['jenis_usaha'] ?? '-' }}
+                                                            {{ $laporan->jenis_usaha ?? '-' }}
                                                         </td>
                                                         <td
                                                             class="px-4 py-3 text-zinc-900 text-sm font-normal font-inter">
-                                                            {{ $laporan['produksi'] ?? '-' }}
+                                                            {{ $laporan->potensi_produksi ?? '-' }}
+                                                            {{ $laporan->satuan_produksi ?? '' }}
                                                         </td>
                                                         <td
                                                             class="px-4 py-3 text-zinc-900 text-sm font-normal font-inter">
-                                                            {{ $laporan['tanggal'] ?? '-' }}
+                                                            Rp
+                                                            {{ number_format($laporan->nte_per_bulan ?? 0, 0, ',', '.') }}
                                                         </td>
                                                         <td class="px-4 py-3">
+                                                            @php
+                                                                $statusColors = [
+                                                                    'verified' => 'bg-green-100 text-green-800',
+                                                                    'pending' => 'bg-yellow-100 text-yellow-800',
+                                                                    'rejected' => 'bg-red-100 text-red-800',
+                                                                ];
+                                                                $statusLabels = [
+                                                                    'verified' => 'Verified',
+                                                                    'pending' => 'Pending',
+                                                                    'rejected' => 'Rejected',
+                                                                ];
+                                                            @endphp
                                                             <span
-                                                                class="px-3 py-1 bg-gray-100 rounded-full text-gray-600 text-xs font-bold font-inter">
-                                                                {{ $laporan['status'] ?? 'DITERIMA' }}
+                                                                class="px-3 py-1 rounded-full text-xs font-bold font-inter {{ $statusColors[$laporan->status_verifikasi] ?? 'bg-gray-100 text-gray-600' }}">
+                                                                {{ $statusLabels[$laporan->status_verifikasi] ?? $laporan->status_verifikasi }}
                                                             </span>
                                                         </td>
                                                     </tr>
@@ -259,7 +275,15 @@
                                                     <tr>
                                                         <td colspan="5"
                                                             class="px-4 py-8 text-center text-gray-500 text-sm">
-                                                            Belum ada laporan terkait
+                                                            <div class="flex flex-col items-center gap-2">
+                                                                <svg class="w-8 h-8 text-gray-400" fill="none"
+                                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                                </svg>
+                                                                <span class="text-sm">Belum ada laporan terkait</span>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 @endforelse
@@ -270,10 +294,10 @@
                             </div>
                         </div>
 
-                        {{-- Kolom Kanan (70% = 7 dari 10) --}}
+                        {{-- Kolom Kanan --}}
                         <div class="col-span-3 rounded">
                             <div class="flex-col">
-                                {{-- Informasi Ketua (1/3) --}}
+                                {{-- Informasi Ketua --}}
                                 <div
                                     class="flex-none] bg-white rounded-2xl shadow-sm p-6 border-l-4 border-emerald-900">
                                     <h4
@@ -288,11 +312,12 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <div class="text-zinc-900 text-lg font-bold font-['Poppins']">
+                                            <div class="text-zinc-900 text-lg font-bold font-['Poppins']"
+                                                id="adminKTHKetua">
                                                 {{ $kth->nama_ketua ?? '-' }}
                                             </div>
                                             <div class="text-neutral-500 text-sm font-normal font-inter">
-                                                Ketua Kelompok
+                                                Ketua KTH
                                             </div>
                                         </div>
                                     </div>
@@ -302,7 +327,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                         </svg>
-                                        <span class="text-base font-bold font-inter">
+                                        <span class="text-base font-bold font-inter" id="adminKTHNoHP">
                                             {{ $kth->no_hp_ketua ?? '-' }}
                                         </span>
                                     </div>
@@ -317,7 +342,8 @@
                                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                             <span class="text-neutral-500 text-sm font-normal font-inter">Nama
                                                 Lengkap</span>
-                                            <span class="text-zinc-900 text-sm font-bold font-inter">
+                                            <span class="text-zinc-900 text-sm font-bold font-inter"
+                                                id="adminKTHPenyuluh">
                                                 {{ $kth->penyuluh->nama_lengkap ?? '-' }}
                                             </span>
                                         </div>
@@ -343,7 +369,7 @@
                                         </div>
                                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                             <span class="text-neutral-500 text-sm font-normal font-inter">No
-                                                Telepon</span></span>
+                                                Telepon</span>
                                             <span class="text-zinc-900 text-sm font-bold font-inter">
                                                 {{ $kth->penyuluh->no_telepon ?? '-' }}
                                             </span>
@@ -360,137 +386,344 @@
 
     @push('scripts')
         <script>
-            // ============================================
-            // MAP untuk Detail KTH Admin
-            // ============================================
-            let detailKTHAdminMap = null;
-            let detailKTHAdminMarker = null;
+            (function() {
+                'use strict';
 
-            function initDetailKTHAdminMap(lat, lng) {
-                const container = document.getElementById('detailKTHAdminMapContainer');
-                if (!container) {
-                    console.warn('Map container not found');
-                    return;
-                }
+                // ============================================
+                // MAP untuk Detail KTH ADMIN
+                // ============================================
+                let adminDetailMap = null;
+                let adminDetailMarker = null;
 
-                // Cek apakah container terlihat
-                if (container.offsetParent === null) {
-                    console.warn('Map container is hidden');
-                    return;
-                }
+                window.initAdminDetailMap = function(lat, lng) {
+                    console.log('📌 initAdminDetailMap called with:', lat, lng);
 
-                const defaultLat = lat || -7.0;
-                const defaultLng = lng || 113.0;
+                    // PERUBAHAN: Gunakan ID baru
+                    const container = document.getElementById('adminDetailMapContainer');
+                    console.log('📦 Container found:', container);
 
-                try {
-                    if (detailKTHAdminMap) {
-                        detailKTHAdminMap.remove();
-                        detailKTHAdminMap = null;
-                        detailKTHAdminMarker = null;
+                    if (!container) {
+                        console.warn('❌ Map container not found');
+                        return;
                     }
 
-                    detailKTHAdminMap = L.map(container, {
-                        center: [defaultLat, defaultLng],
-                        zoom: 13,
-                        zoomControl: true
-                    });
+                    // Cek ukuran container
+                    const rect = container.getBoundingClientRect();
+                    console.log('📐 Container rect:', rect);
 
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    }).addTo(detailKTHAdminMap);
-
-                    if (lat && lng) {
-                        detailKTHAdminMarker = L.marker([lat, lng], {
-                            draggable: false
-                        }).addTo(detailKTHAdminMap);
+                    if (rect.width === 0 || rect.height === 0) {
+                        console.warn('❌ Map container has zero size, retrying in 500ms...');
+                        setTimeout(function() {
+                            window.initAdminDetailMap(lat, lng);
+                        }, 500);
+                        return;
                     }
 
-                    // Force invalidate size after map is rendered
-                    setTimeout(() => {
-                        if (detailKTHAdminMap) {
-                            detailKTHAdminMap.invalidateSize();
+                    if (container.offsetParent === null) {
+                        console.warn('❌ Map container is hidden, retrying in 500ms...');
+                        setTimeout(function() {
+                            window.initAdminDetailMap(lat, lng);
+                        }, 500);
+                        return;
+                    }
+
+                    const defaultLat = lat || -7.0;
+                    const defaultLng = lng || 113.0;
+
+                    try {
+                        if (adminDetailMap) {
+                            adminDetailMap.remove();
+                            adminDetailMap = null;
+                            adminDetailMarker = null;
                         }
-                    }, 500);
-                } catch (error) {
-                    console.error('Error initializing map:', error);
-                }
-            }
 
-            // ============================================
-            // FUNGSI BUKA MODAL
-            // ============================================
-            window.openDetailKTHAdminModal = function(kthId) {
-                const modal = document.getElementById('modalDetailKTHAdmin');
-                if (modal) {
+                        console.log('🗺️ Creating map with center:', [defaultLat, defaultLng]);
+
+                        adminDetailMap = L.map(container, {
+                            center: [defaultLat, defaultLng],
+                            zoom: 13,
+                            zoomControl: true
+                        });
+
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                        }).addTo(adminDetailMap);
+
+                        if (lat && lng) {
+                            console.log('📍 Adding marker at:', [lat, lng]);
+                            adminDetailMarker = L.marker([lat, lng], {
+                                draggable: false
+                            }).addTo(adminDetailMap);
+                        }
+
+                        // Force invalidate size multiple times
+                        setTimeout(function() {
+                            if (adminDetailMap) {
+                                console.log('🔄 Invalidating map size (1)');
+                                adminDetailMap.invalidateSize();
+                            }
+                        }, 500);
+
+                        setTimeout(function() {
+                            if (adminDetailMap) {
+                                console.log('🔄 Invalidating map size (2)');
+                                adminDetailMap.invalidateSize();
+                            }
+                        }, 1000);
+
+                        console.log('✅ Map initialized successfully');
+                    } catch (error) {
+                        console.error('❌ Error initializing map:', error);
+                    }
+                };
+
+                // ============================================
+                // FUNGSI BUKA MODAL ADMIN
+                // ============================================
+                window.openDetailKTHAdminModal = function(kthId) {
+                    console.log('🚀 Opening admin modal for ID:', kthId);
+
+                    const modal = document.getElementById('modalDetailKTHAdmin');
+                    if (!modal) {
+                        console.error('❌ Modal not found!');
+                        return;
+                    }
+
                     modal.showModal();
                     document.body.classList.add('overflow-hidden');
 
-                    // Inisialisasi map setelah modal terbuka
-                    setTimeout(() => {
-                        @if ($kth && $kth->latitude && $kth->longitude)
-                            initDetailKTHAdminMap({{ $kth->latitude }}, {{ $kth->longitude }});
-                        @else
-                            initDetailKTHAdminMap(null, null);
-                        @endif
-                    }, 800);
-                }
-            };
+                    // Tunggu modal benar-benar terbuka
+                    setTimeout(function() {
+                        // Ambil data terbaru
+                        fetch('/admin/kth/' + kthId)
+                            .then(function(response) {
+                                return response.json();
+                            })
+                            .then(function(data) {
+                                console.log('📊 Data received:', data);
 
-            // ============================================
-            // FUNGSI TUTUP MODAL
-            // ============================================
-            function closeDetailKTHAdminModal() {
-                const modal = document.getElementById('modalDetailKTHAdmin');
-                if (modal) {
-                    modal.close();
-                    document.body.classList.remove('overflow-hidden');
-                    if (detailKTHAdminMap) {
-                        detailKTHAdminMap.remove();
-                        detailKTHAdminMap = null;
-                        detailKTHAdminMarker = null;
+                                // Update data di modal
+                                updateKTHAdminDetailModal(data);
+
+                                // Inisialisasi map setelah data diupdate
+                                setTimeout(function() {
+                                    if (data.latitude && data.longitude) {
+                                        window.initAdminDetailMap(
+                                            parseFloat(data.latitude),
+                                            parseFloat(data.longitude)
+                                        );
+                                    } else {
+                                        window.initAdminDetailMap(null, null);
+                                    }
+                                }, 500);
+                            })
+                            .catch(function(error) {
+                                console.error('❌ Error fetching KTH data:', error);
+                            });
+                    }, 300);
+                };
+
+                // ============================================
+                // FUNGSI TUTUP MODAL ADMIN
+                // ============================================
+                window.closeDetailKTHAdminModal = function() {
+                    const modal = document.getElementById('modalDetailKTHAdmin');
+                    if (modal) {
+                        modal.close();
+                        document.body.classList.remove('overflow-hidden');
+
+                        // Cleanup map
+                        if (adminDetailMap) {
+                            adminDetailMap.remove();
+                            adminDetailMap = null;
+                            adminDetailMarker = null;
+                            console.log('🗑️ Map cleaned up');
+                        }
+                    }
+                };
+
+                // ============================================
+                // FUNGSI UPDATE DATA MODAL ADMIN
+                // ============================================
+                function updateKTHAdminDetailModal(data) {
+                    console.log('📝 Updating modal with data:', data);
+
+                    // Update nama di header
+                    var namaHeader = document.getElementById('adminKTHNamaHeader');
+                    if (namaHeader) {
+                        namaHeader.textContent = data.nama_kth || '-';
+                    }
+
+                    // Update nama di card
+                    var namaCard = document.getElementById('adminKTHNamaCard');
+                    if (namaCard) {
+                        namaCard.textContent = data.nama_kth || '-';
+                    }
+
+                    // Update kelas
+                    var kelas = document.getElementById('adminKTHKelas');
+                    if (kelas) {
+                        kelas.textContent = data.kelas_kth || '-';
+                    }
+
+                    // Update registrasi
+                    var registrasi = document.getElementById('adminKTHRegistrasi');
+                    if (registrasi) {
+                        registrasi.textContent = data.nomor_register || '-';
+                    }
+
+                    // Update tanggal
+                    var tanggal = document.getElementById('adminKTHTanggal');
+                    if (tanggal && data.tanggal_register) {
+                        tanggal.textContent = new Date(data.tanggal_register).toLocaleDateString('id-ID', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                        });
+                    }
+
+                    // Update alamat
+                    var alamat = document.getElementById('adminKTHAlamat');
+                    if (alamat) {
+                        alamat.innerHTML = (data.alamat || data.desa || '-') + ',<br>Kec. ' + (data.kecamatan || '-') +
+                            ', Kab. ' + (data.kabupaten || '-');
+                    }
+
+                    // Update latitude
+                    var latitude = document.getElementById('adminKTHLatitude');
+                    if (latitude) {
+                        latitude.textContent = data.latitude || '-';
+                    }
+
+                    // Update longitude
+                    var longitude = document.getElementById('adminKTHLongitude');
+                    if (longitude) {
+                        longitude.textContent = data.longitude || '-';
+                    }
+
+                    // Update ketua
+                    var ketua = document.getElementById('adminKTHKetua');
+                    if (ketua) {
+                        ketua.textContent = data.nama_ketua || '-';
+                    }
+
+                    // Update no HP
+                    var noHP = document.getElementById('adminKTHNoHP');
+                    if (noHP) {
+                        noHP.textContent = data.no_hp_ketua || '-';
+                    }
+
+                    // Update penyuluh
+                    var penyuluh = document.getElementById('adminKTHPenyuluh');
+                    if (penyuluh && data.penyuluh) {
+                        penyuluh.textContent = data.penyuluh.nama_lengkap || '-';
+                    }
+
+                    // Update tabel laporan
+                    var tableBody = document.getElementById('adminKTHLaporanBody');
+                    if (tableBody && data.laporan_kth) {
+                        if (data.laporan_kth.length > 0) {
+                            var html = '';
+                            data.laporan_kth.forEach(function(laporan) {
+                                var statusColors = {
+                                    'verified': 'bg-green-100 text-green-800',
+                                    'pending': 'bg-yellow-100 text-yellow-800',
+                                    'rejected': 'bg-red-100 text-red-800',
+                                };
+                                var statusLabels = {
+                                    'verified': 'Verified',
+                                    'pending': 'Pending',
+                                    'rejected': 'Rejected',
+                                };
+                                var periode = laporan.periode_laporan ? new Date(laporan.periode_laporan)
+                                    .toLocaleDateString('id-ID', {
+                                        month: 'short',
+                                        year: 'numeric'
+                                    }) : '-';
+
+                                html += `
+                            <tr class="border-b border-gray-100 hover:bg-gray-50/50">
+                                <td class="px-4 py-3 text-zinc-900 text-sm font-normal font-inter">${periode}</td>
+                                <td class="px-4 py-3 text-zinc-900 text-sm font-normal font-inter">${laporan.jenis_usaha || '-'}</td>
+                                <td class="px-4 py-3 text-zinc-900 text-sm font-normal font-inter">${laporan.potensi_produksi || '-'} ${laporan.satuan_produksi || ''}</td>
+                                <td class="px-4 py-3 text-zinc-900 text-sm font-normal font-inter">Rp ${Number(laporan.nte_per_bulan || 0).toLocaleString('id-ID')}</td>
+                                <td class="px-4 py-3">
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold font-inter ${statusColors[laporan.status_verifikasi] || 'bg-gray-100 text-gray-600'}">
+                                        ${statusLabels[laporan.status_verifikasi] || laporan.status_verifikasi}
+                                    </span>
+                                </td>
+                            </tr>
+                        `;
+                            });
+                            tableBody.innerHTML = html;
+                        } else {
+                            tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="px-4 py-8 text-center text-gray-500 text-sm">
+                                <div class="flex flex-col items-center gap-2">
+                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <span class="text-sm">Belum ada laporan terkait</span>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                        }
                     }
                 }
-            }
 
-            // ============================================
-            // FUNGSI BUKA PETA FULLSCREEN
-            // ============================================
-            function openFullMapAdmin() {
-                const lat = {{ $kth->latitude ?? 'null' }};
-                const lng = {{ $kth->longitude ?? 'null' }};
-                if (lat && lng) {
-                    window.open(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}&zoom=15`, '_blank');
-                }
-            }
+                // ============================================
+                // FUNGSI BUKA PETA FULLSCREEN ADMIN
+                // ============================================
+                window.openFullMapAdmin = function() {
+                    var lat = {{ $kth->latitude ?? 'null' }};
+                    var lng = {{ $kth->longitude ?? 'null' }};
+                    if (lat && lng) {
+                        window.open('https://www.openstreetmap.org/?mlat=' + lat + '&mlon=' + lng + '&zoom=15',
+                            '_blank');
+                    }
+                };
 
-            // ============================================
-            // FUNGSI KONFIRMASI HAPUS
-            // ============================================
-            function confirmDeleteKTHAdmin(id, namaKth) {
-                if (confirm(`Apakah Anda yakin ingin menghapus KTH "${namaKth}"?`)) {
-                    document.getElementById('delete-form-admin-' + id).submit();
-                }
-            }
+                // ============================================
+                // FUNGSI HAPUS KTH ADMIN
+                // ============================================
+                window.openHapusKTHAdminModal = function(id, namaKth) {
+                    if (confirm('Apakah Anda yakin ingin menghapus KTH "' + namaKth + '"?')) {
+                        var form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '/admin/kth/' + id;
+                        form.innerHTML = `
+                    @csrf
+                    @method('DELETE')
+                `;
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                };
 
-            // ============================================
-            // EVENT LISTENER MODAL
-            // ============================================
-            document.addEventListener('DOMContentLoaded', function() {
-                const modal = document.getElementById('modalDetailKTHAdmin');
-                if (modal) {
-                    modal.addEventListener('close', function() {
-                        document.body.classList.remove('overflow-hidden');
-                        if (detailKTHAdminMap) {
-                            detailKTHAdminMap.remove();
-                            detailKTHAdminMap = null;
-                            detailKTHAdminMarker = null;
-                        }
-                    });
-                    modal.addEventListener('cancel', function() {
-                        document.body.classList.remove('overflow-hidden');
-                    });
-                }
-            });
+                // ============================================
+                // EVENT LISTENER MODAL ADMIN
+                // ============================================
+                document.addEventListener('DOMContentLoaded', function() {
+                    var modal = document.getElementById('modalDetailKTHAdmin');
+                    if (modal) {
+                        modal.addEventListener('close', function() {
+                            document.body.classList.remove('overflow-hidden');
+                            if (adminDetailMap) {
+                                adminDetailMap.remove();
+                                adminDetailMap = null;
+                                adminDetailMarker = null;
+                            }
+                        });
+                        modal.addEventListener('cancel', function() {
+                            document.body.classList.remove('overflow-hidden');
+                        });
+                    }
+                });
+
+            })();
         </script>
     @endpush
 @else

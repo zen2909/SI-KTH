@@ -81,19 +81,19 @@
                 <table class="w-full">
                     <thead class="bg-zinc-100 border-b border-stone-300">
                         <tr>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">Nama
+                            <th class="px-6 py-4 text-left text-sm font-bold text-primary uppercase tracking-wider">Nama
                                 KTH</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">Kelas
+                            <th class="px-6 py-4 text-center text-sm font-bold text-primary uppercase tracking-wider">Kelas
                             </th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">
+                            <th class="px-6 py-4 text-left text-sm font-bold text-primary uppercase tracking-wider">
                                 Desa/Kecamatan</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">
+                            <th class="px-6 py-4 text-center text-sm font-bold text-primary uppercase tracking-wider">
                                 Tanggal Input</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">Nama
+                            <th class="px-6 py-4 text-left text-sm font-bold text-primary uppercase tracking-wider">Nama
                                 Penyuluh</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">
+                            <th class="px-6 py-4 text-center text-sm font-bold text-primary uppercase tracking-wider">
                                 Status</th>
-                            <th class="px-6 py-4 text-center text-sm font-bold text-[#404943] tracking-wider">Aksi
+                            <th class="px-6 py-4 text-center text-sm font-bold text-primary uppercase tracking-wider">Aksi
                             </th>
                         </tr>
                     </thead>
@@ -103,29 +103,51 @@
                                 <td class="px-6 py-4">
                                     <span class="text-base font-medium text-zinc-900">{{ $kth->nama_kth }}</span>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-base text-zinc-600">{{ $kth->kelas_kth ?? '-' }}</span>
+                                <td class="px-6 py-4 text-center ">
+                                    @if ($kth->kelas_kth == 'Utama')
+                                        <span class="items-center justify-center px-3 bg-red-100 rounded-lg inline-block">
+                                            <span class="text-red-700 text-xs font-semibold font-inter leading-4">
+                                                Utama
+                                            </span>
+                                        </span>
+                                    @elseif($kth->kelas_kth == 'Madya')
+                                        <span class="items-center justify-center px-3 bg-red-100 rounded-lg inline-block">
+                                            <span class="text-red-700 text-xs font-semibold font-inter leading-4">
+                                                Madya
+                                            </span>
+                                        </span>
+                                    @elseif($kth->kelas_kth == 'Pemula')
+                                        <span class="items-center justify-center px-3 bg-green-100 rounded-lg inline-block">
+                                            <span class="text-green-700 text-xs font-semibold font-inter leading-4">
+                                                Pemula
+                                            </span>
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="text-base text-neutral-700">{{ $kth->desa ?? '-' }},
                                         {{ $kth->kecamatan ?? '-' }}</span>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="text-center px-6 py-4">
                                     <span
                                         class="text-base text-neutral-500">{{ $kth->created_at ? $kth->created_at->format('d M Y') : '-' }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="text-base text-zinc-900">{{ $kth->penyuluh->nama_lengkap ?? '-' }}</span>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase bg-yellow-100 text-yellow-800">
-                                        <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                                        Pending
+                                <td class="text-center px-6 py-4">
+                                    <span class="px-2 py-1 bg-amber-100 rounded-lg inline-flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5 text-amber-800" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span
+                                            class="text-amber-800 text-xs font-semibold font-inter leading-4">Pending</span>
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex justify-center gap-2">
                                         {{-- Tombol Setujui --}}
                                         <button type="button"
                                             onclick="openApproveKTHModal({{ $kth->id }}, '{{ addslashes($kth->nama_kth) }}')"
@@ -165,8 +187,8 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="px-6 py-12 text-center text-neutral-500">
-                                    <svg class="w-16 h-16 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                                    <svg class="w-16 h-16 mx-auto text-gray-300 mb-3" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                         </path>
@@ -180,62 +202,17 @@
                 </table>
             </div>
 
-            {{-- Pagination --}}
-            @if ($kths->hasPages())
-                <div
-                    class="px-6 py-4 bg-white border-t border-stone-300 flex flex-wrap items-center justify-between gap-3">
-                    <p class="text-sm text-neutral-700">
-                        Menampilkan {{ $kths->firstItem() ?? 0 }} dari {{ $kths->total() }} data KTH
-                    </p>
-                    <div class="flex items-center gap-2">
-                        @if ($kths->onFirstPage())
-                            <span
-                                class="w-8 h-8 flex items-center justify-center rounded-lg border border-stone-300 text-neutral-400 opacity-50 cursor-not-allowed">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </span>
-                        @else
-                            <a href="{{ $kths->previousPageUrl() }}"
-                                class="w-8 h-8 flex items-center justify-center rounded-lg border border-stone-300 hover:bg-gray-50 transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </a>
-                        @endif
-
-                        @foreach ($kths->getUrlRange(1, $kths->lastPage()) as $page => $url)
-                            @if ($page == $kths->currentPage())
-                                <span
-                                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-emerald-900 text-white">{{ $page }}</span>
-                            @else
-                                <a href="{{ $url }}"
-                                    class="w-8 h-8 flex items-center justify-center rounded-lg border border-stone-300 hover:bg-gray-50 transition">{{ $page }}</a>
-                            @endif
-                        @endforeach
-
-                        @if ($kths->hasMorePages())
-                            <a href="{{ $kths->nextPageUrl() }}"
-                                class="w-8 h-8 flex items-center justify-center rounded-lg border border-stone-300 hover:bg-gray-50 transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
-                        @else
-                            <span
-                                class="w-8 h-8 flex items-center justify-center rounded-lg border border-stone-300 text-neutral-400 opacity-50 cursor-not-allowed">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </span>
-                        @endif
-                    </div>
+            <!-- Pagination -->
+            <div
+                class="px-6 py-4 bg-zinc-100 border-t border-stone-300 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="text-neutral-700 text-sm font-normal font-inter leading-6">
+                    Menampilkan <span class="font-semibold">{{ $kths->firstItem() ?? 0 }}</span>
+                    dari <span class="font-semibold">{{ $kths->total() }}</span> KTH
                 </div>
-            @endif
+                <div>
+                    {{ $kths->appends(request()->query())->links('pagination::tailwind') }}
+                </div>
+            </div>
         </div>
     </div>
 

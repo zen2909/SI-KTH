@@ -9,14 +9,6 @@
             <div class="bg-white border-b border-stone-300/20 sticky top-0 z-20 flex-shrink-0">
                 <div class="flex items-center justify-between py-4 px-6">
                     <div>
-                        <div class="flex items-center gap-2 text-sm">
-                            <span class="text-neutral-700">Laporan KTH</span>
-                            <svg class="w-3 h-3 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                                </path>
-                            </svg>
-                            <span class="text-emerald-900 font-semibold">Detail Laporan</span>
-                        </div>
                         <h2 class="text-2xl font-semibold text-zinc-900 font-poppins">
                             {{ $laporan->kth->nama_kth ?? 'KTH' }} -
                             {{ $laporan->periode_laporan ? \Carbon\Carbon::parse($laporan->periode_laporan)->format('F Y') : '-' }}
@@ -41,8 +33,7 @@
                         <div class="flex items-start gap-3">
                             <div>
                                 <span
-                                    class="inline-block px-3 py-1 bg-red-700 rounded-full text-white text-xs font-semibold uppercase">Ditolak
-                                    / Perbaikan</span>
+                                    class="inline-block px-3 py-1 bg-red-700 rounded-full text-white text-xs font-semibold uppercase">Rejected</span>
                                 @if ($laporan->catatan_revisi)
                                     <div class="mt-2">
                                         <p class="text-red-700 text-sm font-semibold">Catatan Revisi dari Admin:</p>
@@ -61,7 +52,7 @@
                 @if ($laporan->status_verifikasi == 'verified')
                     <div class="bg-green-50/50 rounded-3xl p-4 mb-4 border border-green-700/10">
                         <span
-                            class="inline-block px-3 py-1 bg-green-700 rounded-full text-white text-xs font-semibold uppercase">Terverifikasi</span>
+                            class="inline-block px-3 py-1 bg-green-700 rounded-full text-white text-xs font-semibold uppercase">Verified</span>
                     </div>
                 @endif
 
@@ -69,8 +60,7 @@
                 @if ($laporan->status_verifikasi == 'pending')
                     <div class="bg-yellow-50/50 rounded-3xl p-4 mb-4 border border-yellow-700/10">
                         <span
-                            class="inline-block px-3 py-1 bg-yellow-600 rounded-full text-white text-xs font-semibold uppercase">Menunggu
-                            Verifikasi</span>
+                            class="inline-block px-3 py-1 bg-yellow-600 rounded-full text-white text-xs font-semibold uppercase">Pending</span>
                     </div>
                 @endif
 
@@ -78,7 +68,7 @@
                 <div class="mb-4">
                     <div class="flex items-center gap-2 mb-3">
                         <div class="w-1.5 h-6 bg-primary rounded-full"></div>
-                        <h3 class="text-xl font-medium text-zinc-900 font-poppins">Ringkasan Informasi</h3>
+                        <h3 class="text-xl font-medium text-zinc-900 font-poppins">Ringkasan Informasi penyuluh</h3>
                     </div>
                     <div class="grid grid-cols-3 gap-4">
                         <div class="bg-white rounded-3xl p-4 border border-stone-300/30 shadow-sm">
@@ -442,7 +432,7 @@
         // ============================================
         // FUNGSI BUKA MODAL DETAIL LAPORAN
         // ============================================
-        window.openDetailLaporanModal = function(laporanId) {
+        window.openDetailLaporanPenyuluhModal = function(laporanId) {
             console.log('Opening detail modal for laporan ID:', laporanId); // Debug
             const modal = document.getElementById('modalDetailLaporan');
             if (modal) {

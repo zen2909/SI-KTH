@@ -1,7 +1,7 @@
 @props(['laporan' => null])
 
 @if ($laporan)
-    <dialog id="modalDetailLaporanAdmin"
+    <dialog id="modalDetailLaporanPimpinanView"
         class="w-full max-w-6xl mx-auto rounded-3xl shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm overflow-hidden">
 
         <div class="bg-white rounded-3xl flex flex-col max-h-[90vh]">
@@ -9,12 +9,12 @@
             <div class="bg-white border-b border-stone-300/20 sticky top-0 z-20 flex-shrink-0">
                 <div class="flex items-center justify-between py-4 px-6">
                     <div>
-                        <h2 class="text-2xl font-semibold text-zinc-900 font-poppins">
+                        <h2 class="text-2xl font-semibold text-primary font-poppins">
                             {{ $laporan->kth->nama_kth ?? 'KTH' }} -
                             {{ $laporan->periode_laporan ? \Carbon\Carbon::parse($laporan->periode_laporan)->format('F Y') : '-' }}
                         </h2>
                     </div>
-                    <button type="button" onclick="closeDetailLaporanAdmin()"
+                    <button type="button" onclick="closeDetailLaporanPimpinanView()"
                         class="text-gray-400 hover:text-gray-600 transition">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -27,7 +27,7 @@
 
             {{-- Body --}}
             <div class="overflow-y-auto flex-1 px-6 py-4 bg-gray-50">
-                {{-- Status Revisi jika rejected --}}
+                {{-- Status --}}
                 @if ($laporan->status_verifikasi == 'rejected')
                     <div class="bg-red-50/50 rounded-3xl p-4 mb-4 border border-red-700/10">
                         <div class="flex items-start gap-3">
@@ -120,7 +120,6 @@
 
                                     $satuan = $laporan->satuan_produksi ?? 'Kg';
 
-                                    // Tampilkan nilai lengkap dengan satuan
                                     $potensiDisplay =
                                         $potensiNumeric > 0 ? $potensiNumeric . ' ' . $satuan : '0 ' . $satuan;
                                 @endphp
@@ -244,7 +243,7 @@
                     </div>
                 </div>
 
-                {{-- 🔥 KETERANGAN TAMBAHAN --}}
+                {{-- Keterangan Tambahan --}}
                 @if ($laporan->keterangan_tambahan)
                     <div class="mb-4">
                         <div class="flex items-center gap-2 mb-3">
@@ -401,7 +400,7 @@
                                 class="font-semibold capitalize">{{ $laporan->status_verifikasi ?? 'Pending' }}</span></span>
                     </div>
                     <div class="flex items-center gap-3">
-                        <button type="button" onclick="closeDetailLaporanAdmin()"
+                        <button type="button" onclick="closeDetailLaporanPimpinanView()"
                             class="flex items-center gap-2 px-4 py-2 rounded-xl border border-neutral-500 text-neutral-700 text-sm font-semibold hover:bg-neutral-50 transition">
                             <svg class="w-4 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -409,26 +408,6 @@
                             </svg>
                             Kembali
                         </button>
-
-                        {{-- Tombol Aksi untuk Admin --}}
-                        @if ($laporan->status_verifikasi == 'pending')
-                            <button type="button" onclick="bukaModalApproveLaporan({{ $laporan->id }})"
-                                class="flex items-center gap-2 px-4 py-2 bg-primary rounded-xl text-white text-sm font-semibold hover:bg-emerald-800 transition shadow">
-                                <svg class="w-4 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                Verifikasi
-                            </button>
-                            <button type="button" onclick="bukaModalRejectLaporan({{ $laporan->id }})"
-                                class="flex items-center gap-2 px-4 py-2 bg-red-700 rounded-xl text-white text-sm font-semibold hover:bg-red-800 transition shadow">
-                                <svg class="w-4 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                Tolak
-                            </button>
-                        @endif
                     </div>
                 </div>
             </div>
@@ -437,42 +416,21 @@
 
     <script>
         // ============================================
-        // FUNGSI BUKA MODAL DETAIL LAPORAN ADMIN
+        // FUNGSI BUKA MODAL DETAIL LAPORAN ADMIN VIEW
         // ============================================
-        window.openDetailLaporanAdmin = function(laporanId) {
-            console.log('Opening admin detail modal for laporan ID:', laporanId);
-
-            // 🔥 Ambil data laporan via AJAX dari route yang sudah ada
-            fetch(`/admin/verifikasi/laporan/${laporanId}/detail`)
-                .then(response => {
-                    if (!response.ok) throw new Error('Gagal mengambil data laporan');
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Data laporan:', data);
-                    // Update modal dengan data terbaru jika perlu
-                    const modal = document.getElementById('modalDetailLaporanAdmin');
-                    if (modal) {
-                        modal.showModal();
-                        document.body.classList.add('no-scroll');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching laporan detail:', error);
-                    // Fallback: langsung buka modal dengan data yang ada
-                    const modal = document.getElementById('modalDetailLaporanAdmin');
-                    if (modal) {
-                        modal.showModal();
-                        document.body.classList.add('no-scroll');
-                    }
-                });
+        window.openDetailLaporanPimpinanView = function(laporanId) {
+            const modal = document.getElementById('modalDetailLaporanPimpinanView');
+            if (modal) {
+                modal.showModal();
+                document.body.classList.add('no-scroll');
+            }
         };
 
         // ============================================
-        // FUNGSI TUTUP MODAL DETAIL LAPORAN ADMIN
+        // FUNGSI TUTUP MODAL DETAIL LAPORAN ADMIN VIEW
         // ============================================
-        function closeDetailLaporanAdmin() {
-            const modal = document.getElementById('modalDetailLaporanAdmin');
+        function closeDetailLaporanPimpinanView() {
+            const modal = document.getElementById('modalDetailLaporanPimpinanView');
             if (modal) {
                 modal.close();
                 document.body.classList.remove('no-scroll');
@@ -480,65 +438,10 @@
         }
 
         // ============================================
-        // 🔥 FUNGSI BUKA MODAL APPROVE LAPORAN
-        // ============================================
-        window.bukaModalApproveLaporan = function(laporanId) {
-            // Ambil data dari modal detail
-            const namaKTH = document.querySelector('#modalDetailLaporanAdmin h2');
-            let namaKthText = namaKTH ? namaKTH.textContent.split(' - ')[0] : '-';
-            let periodeText = namaKTH ? namaKTH.textContent.split(' - ')[1] : '-';
-
-            // Tutup modal detail
-            closeDetailLaporanAdmin();
-
-            // 🔥 Panggil fungsi approve dengan callback
-            setTimeout(function() {
-                if (typeof openApproveLaporanModal === 'function') {
-                    // Panggil dengan parameter yang sama seperti di halaman verifikasi
-                    openApproveLaporanModal(
-                        laporanId,
-                        periodeText,
-                        namaKthText,
-                        function(id) {
-                            // Callback setelah approve berhasil
-                            approveLaporan(id);
-                        }
-                    );
-                } else {
-                    console.error('Fungsi openApproveLaporanModal tidak ditemukan!');
-                    alert('Fungsi modal approve tidak ditemukan.');
-                }
-            }, 200);
-        };
-
-        // ============================================
-        // 🔥 FUNGSI BUKA MODAL REJECT LAPORAN
-        // ============================================
-        window.bukaModalRejectLaporan = function(laporanId) {
-            // Ambil data dari modal detail
-            const namaKTH = document.querySelector('#modalDetailLaporanAdmin h2');
-            let namaKthText = namaKTH ? namaKTH.textContent.split(' - ')[0] : '-';
-            let periodeText = namaKTH ? namaKTH.textContent.split(' - ')[1] : '-';
-
-            // Tutup modal detail
-            closeDetailLaporanAdmin();
-
-            // 🔥 Panggil fungsi reject
-            setTimeout(function() {
-                if (typeof openRejectLaporanModal === 'function') {
-                    openRejectLaporanModal(laporanId, periodeText, namaKthText);
-                } else {
-                    console.error('Fungsi openRejectLaporanModal tidak ditemukan!');
-                    alert('Fungsi modal reject tidak ditemukan.');
-                }
-            }, 200);
-        };
-
-        // ============================================
         // EVENT LISTENER MODAL
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('modalDetailLaporanAdmin');
+            const modal = document.getElementById('modalDetailLaporanPimpinanView');
             if (modal) {
                 modal.addEventListener('close', function() {
                     document.body.classList.remove('no-scroll');
@@ -551,9 +454,9 @@
     </script>
 @else
     {{-- Fallback jika laporan null --}}
-    <dialog id="modalDetailLaporanAdmin"
+    <dialog id="modalDetailLaporanPimpinanView"
         class="w-full max-w-md mx-auto rounded-lg shadow-lg p-6 backdrop:bg-black/50">
         <p class="text-red-500 font-semibold">Data laporan tidak ditemukan.</p>
-        <button onclick="closeDetailLaporanAdmin()" class="mt-4 bg-gray-200 px-4 py-2 rounded">Tutup</button>
+        <button onclick="closeDetailLaporanPimpinanView()" class="mt-4 bg-gray-200 px-4 py-2 rounded">Tutup</button>
     </dialog>
 @endif

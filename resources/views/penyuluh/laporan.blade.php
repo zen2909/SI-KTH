@@ -8,7 +8,7 @@
         <div class="flex flex-wrap items-center justify-between gap-4">
             <div class="mb-2">
                 <h1 class="text-2xl font-bold text-primary font-poppins">
-                    Daftar Laporan
+                    Daftar Laporan KTH
                 </h1>
                 <p class="text-sm text-[#404943] font-normal mt-1">
                     Kelola dan pantau seluruh laporan Kelompok Tani Hutan di
@@ -22,6 +22,77 @@
                 </svg>
                 <span>Buat Laporan Baru</span>
             </button>
+        </div>
+
+        {{-- Statistik Cards --}}
+        <div class="self-stretch grid grid-cols-4 gap-4">
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-blue-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-blue-600 text-sm font-normal font-['Inter']">Total Laporan</p>
+                        <p class="text-blue-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                            {{ number_format($totalLaporan) }}
+                        </p>
+                    </div>
+                    <div class="flex items-center px-3 py-2 bg-blue-100 rounded-xl">
+                        <span class="icon-[carbon--report] w-6 h-6 bg-blue-600"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-blue-600 text-sm font-['Inter']">Seluruh laporan dari semua KTH</span>
+                </div>
+            </div>
+
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-green-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-green-600 text-sm font-normal font-['Inter']">Verified</p>
+                        <p class="text-green-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                            {{ number_format($totalVerified) }}
+                        </p>
+                    </div>
+                    <div class="flex items-center px-3 py-2 bg-green-100 rounded-xl">
+                        <span class="icon-[ix--success] w-6 h-6 bg-green-600"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-green-600 text-sm font-['Inter']">Sudah diverifikasi</span>
+                </div>
+            </div>
+
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-amber-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-amber-600 text-sm font-normal font-['Inter']">Pending</p>
+                        <p class="text-amber-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                            {{ number_format($totalPending) }}
+                        </p>
+                    </div>
+                    <div class="flex items-center px-3 py-2 bg-amber-100 rounded-xl">
+                        <span class="icon-[tabler--clock] w-6 h-6 bg-amber-600"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-amber-600 text-sm font-['Inter']">Menunggu verifikasi</span>
+                </div>
+            </div>
+
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-red-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-red-600 text-sm font-normal font-['Inter']">Ditolak</p>
+                        <p class="text-red-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                            {{ number_format($totalRejected) }}
+                        </p>
+                    </div>
+                    <div class="flex items-center px-3 py-2 bg-red-100 rounded-xl">
+                        <span class="icon-[carbon--close-outline] w-6 h-6 bg-red-600"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-red-600 text-sm font-['Inter']">Tidak lolos verifikasi</span>
+                </div>
+            </div>
         </div>
 
         {{-- Filter & Pencarian --}}
@@ -155,8 +226,9 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-center gap-2">
-                                        <button type="button" onclick="openDetailLaporanModal({{ $laporan->id }})"
-                                            class="text-neutral hover:outline-2 hover:outline-primary hover:text-primary hover:bg-neutral bg-primary rounded-lg p-2 transition-all duration-200"
+                                        <button type="button"
+                                            onclick="openDetailLaporanPenyuluhModal({{ $laporan->id }})"
+                                            class="text-neutral hover:outline-2 hover:outline-yellow-500 hover:text-yellow-500 hover:bg-neutral bg-yellow-500 rounded-lg p-2 transition-all duration-200"
                                             title="Detail">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -286,6 +358,18 @@
                     </div>
                 </div>
             @endif
+
+            <!-- Pagination -->
+            <div
+                class="px-6 py-4 bg-zinc-100 border-t border-stone-300 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="text-neutral-700 text-sm font-normal font-inter leading-6">
+                    Menampilkan <span class="font-semibold">{{ $laporans->firstItem() ?? 0 }}</span>
+                    dari <span class="font-semibold">{{ $laporans->total() }}</span> Laporan
+                </div>
+                <div>
+                    {{ $laporans->appends(request()->query())->links('pagination::tailwind') }}
+                </div>
+            </div>
         </div>
     </div>
 @endsection
