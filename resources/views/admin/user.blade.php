@@ -24,20 +24,17 @@
         {{-- Statistik Cards --}}
         <div class="self-stretch grid grid-cols-3 gap-4">
 
-            <div class="p-6 bg-white rounded-3xl border-l-4 border-emerald-900 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-blue-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
                 <div class="flex justify-between items-start">
                     <div>
-                        <p class="text-neutral-700 text-sm font-normal font-['Inter']">Total
+                        <p class="text-blue-600 text-sm font-normal font-['Inter']">Total
                             Admin</p>
-                        <p class="text-emerald-900 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                        <p class="text-blue-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
                             {{ number_format($totalAdmin) }}
                         </p>
                     </div>
-                    <div class="px-3 py-2.5 bg-green-200 rounded-xl">
-                        <svg class="w-6 h-6 text-green-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
+                    <div class="flex justify-center items-center px-3 py-2 bg-blue-100 rounded-xl">
+                        <span class="icon-[ri--admin-line] w-6 h-6 bg-blue-600"></span>
                     </div>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
@@ -45,45 +42,39 @@
                 </div>
             </div>
 
-            <div class="p-6 bg-white rounded-3xl border-l-4 border-emerald-900 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-emerald-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
                 <div class="flex justify-between items-start">
                     <div>
-                        <p class="text-neutral-700 text-sm font-normal font-['Inter']">Total
+                        <p class="text-emerald-600 text-sm font-normal font-['Inter']">Total
                             Penyuluh</p>
-                        <p class="text-emerald-900 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                        <p class="text-emerald-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
                             {{ number_format($totalPenyuluh) }}
                         </p>
                     </div>
-                    <div class="px-3 py-2.5 bg-green-200 rounded-xl">
-                        <svg class="w-6 h-6 text-green-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
+                    <div class="flex items-center justify-center px-3 py-2 bg-emerald-100 rounded-xl">
+                        <span class="icon-[mdi--people-outline] w-6 h-6 bg-emerald-600"></span>
                     </div>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
-                    <span class="text-emerald-900 text-sm font-['Inter']">Jumlah Penyuluh</span>
+                    <span class="text-emerald-600 text-sm font-['Inter']">Jumlah Penyuluh</span>
                 </div>
             </div>
 
-            <div class="p-6 bg-white rounded-3xl border-l-4 border-emerald-900 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-red-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
                 <div class="flex justify-between items-start">
                     <div>
-                        <p class="text-neutral-700 text-sm font-normal font-['Inter']">Total
+                        <p class="text-red-600 text-sm font-normal font-['Inter']">Total
                             Pimpinan</p>
-                        <p class="text-emerald-900 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                        <p class="text-red-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
                             {{ number_format($totalPimpinan) }}
                         </p>
                     </div>
-                    <div class="px-3 py-2.5 bg-green-200 rounded-xl">
-                        <svg class="w-6 h-6 text-green-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
+                    <div class="flex items-center justify-center px-3 py-2 bg-red-100 rounded-xl">
+                        <span class="icon-[fluent-mdl2--party-leader] w-6 h-6 bg-red-600"></span>
                     </div>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
-                    <span class="text-emerald-900 text-sm font-['Inter']">Jumlah Pimpinan</span>
+                    <span class="text-red-600 text-sm font-['Inter']">Jumlah Pimpinan</span>
                 </div>
             </div>
         </div>
@@ -113,7 +104,7 @@
                     <label class="block text-neutral-700 text-sm font-normal font-inter mb-2">
                         Role Pengguna
                     </label>
-                    <select name="status_verifikasi"
+                    <select name="role"
                         class="w-full px-4 py-3 bg-[#f8f9fa] rounded-xl border border-[#c0c9c1] focus:outline-none focus:ring-2 focus:ring-emerald-900/20 focus:border-emerald-900 text-base font-inter appearance-none cursor-pointer">
                         <option value="">Semua Role</option>
                         <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>

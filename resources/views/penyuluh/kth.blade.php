@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar KTH Saya')
+@section('title', 'Daftar KTH')
 
 @section('content')
     <div class="space-y-6">
@@ -21,6 +21,99 @@
                 </svg>
                 <span>Tambah KTH Baru</span>
             </button>
+        </div>
+
+        <!-- Statistik Cards -->
+        <div class="self-stretch grid grid-cols-5 gap-4">
+            <!-- Total KTH -->
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-blue-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-blue-600 text-sm font-normal font-inter">Total KTH</p>
+                        <p class="text-blue-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                            {{ $totalKTH }}
+                        </p>
+                    </div>
+                    <div class="flex items-center px-3 py-2 bg-blue-100 rounded-xl">
+                        <span class="icon-[material-symbols--forest-outline-rounded] w-6 h-6 bg-blue-600"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-blue-600 text-sm font-inter">Total keseluruhan</span>
+                </div>
+            </div>
+
+            <!-- Terverifikasi -->
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-green-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-green-600 text-sm font-normal font-inter">Verified</p>
+                        <p class="text-green-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                            {{ $totalVerified }}
+                        </p>
+                    </div>
+                    <div class="flex items-center px-3 py-2 bg-green-100 rounded-xl">
+                        <span class="icon-[ix--success] w-6 h-6 bg-green-600"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-green-600 text-sm font-inter">Sudah diverifikasi</span>
+                </div>
+            </div>
+
+            <!-- Pending -->
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-amber-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-amber-600 text-sm font-normal font-inter">Pending</p>
+                        <p class="text-amber-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                            {{ $totalPending }}
+                        </p>
+                    </div>
+                    <div class="flex items-center px-3 py-2 bg-amber-100 rounded-xl">
+                        <span class="icon-[tabler--clock] w-6 h-6 bg-amber-600"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-amber-600 text-sm font-inter">Menunggu verifikasi</span>
+                </div>
+            </div>
+
+            <!-- Ditolak -->
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-red-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-red-600 text-sm font-normal font-inter">Rejected</p>
+                        <p class="text-red-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                            {{ $totalRejected }}
+                        </p>
+                    </div>
+                    <div class="flex items-center px-3 py-2 bg-red-100 rounded-xl">
+                        <span class="icon-[carbon--close-outline] w-6 h-6 bg-red-600"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-red-600 text-sm font-inter">Tidak lolos verifikasi</span>
+                </div>
+            </div>
+
+            <!-- Non-Aktif -->
+            <div class="p-6 bg-white rounded-3xl border-l-4 border-gray-600 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-600 text-sm font-normal font-inter">Non-Aktif</p>
+                        <p class="text-gray-600 text-4xl lg:text-5xl font-bold font-['Poppins'] leading-[57.60px]">
+                            {{ $totalNonAktif ?? 0 }}
+                        </p>
+                    </div>
+                    <div class="flex items-center px-3 py-2 bg-gray-100 rounded-xl">
+                        <span class="icon-[fe--disabled] w-6 h-6 bg-gray-600"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-gray-600 text-sm font-inter">Tidak aktif</span>
+                </div>
+            </div>
         </div>
 
         {{-- Filter & Pencarian --}}
@@ -89,79 +182,138 @@
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-[#c0c9c1]">
                     <thead class="bg-[#f3f4f5]">
-                        <tr>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">NAMA KTH</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">KELAS</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">VERIFIKASI</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">STATUS</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-[#404943] tracking-wider">KECAMATAN</th>
-                            <th class="px-6 py-4 text-center text-sm font-bold text-[#404943] tracking-wider">AKSI</th>
+                        <tr class="bg-zinc-100 border-b border-stone-300">
+                            <th class="px-6 py-4 text-left min-w-[200px]">
+                                <span class="text-primary text-sm font-bold font-inter uppercase tracking-wide">Nama
+                                    KTH</span>
+                            </th>
+                            <th class="px-6 py-4 text-center min-w-[100px]">
+                                <span
+                                    class="text-primary text-sm font-bold font-inter uppercase tracking-wide">Kelas</span>
+                            </th>
+                            <th class="px-6 py-4 text-center min-w-[120px]">
+                                <span class="text-primary text-sm font-bold font-inter uppercase tracking-wide">Status
+                                    KTH</span>
+                            </th>
+                            <th class="px-6 py-4 text-center min-w-[140px]">
+                                <span class="text-primary text-sm font-bold font-inter uppercase tracking-wide">Status
+                                    Verifikasi</span>
+                            </th>
+                            <th class="px-6 py-4 text-center min-w-[120px]">
+                                <span
+                                    class="text-primary text-sm font-bold font-inter uppercase tracking-wide">Kecamatan</span>
+                            </th>
+                            <th class="px-6 py-4 text-center min-w-[100px]">
+                                <span class="text-primary text-sm font-bold font-inter uppercase tracking-wide">Aksi</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#c0c9c1]">
                         @forelse($kths as $kth)
                             <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-5">
+                                <!-- Nama KTH -->
+                                <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 flex items-center justify-center bg-[#2b644a1a] rounded-full">
-                                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                                                </path>
-                                            </svg>
-                                        </div>
                                         <div>
-                                            <p class="text-base font-normal text-[#191c1d]">{{ $kth->nama_kth }}</p>
-                                            <p class="text-sm text-[#707973]">No Registrasi:
-                                                {{ $kth->nomor_register ?? '-' }}</p>
+                                            <div class="text-zinc-900 text-sm font-normal font-inter">
+                                                {{ $kth->nama_kth }}</div>
+                                            <div class="text-neutral-700 text-xs font-normal font-inter leading-4">
+                                                Desa {{ $kth->desa }}, {{ $kth->kecamatan }}
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-5 text-base text-[#191c1d]">{{ $kth->kelas_kth ?? '-' }}</td>
-                                <td class="px-6 py-5">
-                                    @php
-                                        $statusClass =
-                                            [
-                                                'pending' => 'bg-amber-100 text-amber-800 border-amber-200',
-                                                'verified' => 'bg-green-100 text-green-800 border-green-200',
-                                                'rejected' => 'bg-red-100 text-red-800 border-red-200',
-                                            ][$kth->status_verifikasi] ?? 'bg-gray-100 text-gray-800';
-                                        $dotClass =
-                                            [
-                                                'pending' => 'bg-amber-500',
-                                                'verified' => 'bg-green-500',
-                                                'rejected' => 'bg-red-500',
-                                            ][$kth->status_verifikasi] ?? 'bg-gray-500';
-                                    @endphp
-                                    <span
-                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium border {{ $statusClass }}">
-                                        <span class="w-1.5 h-1.5 rounded-full {{ $dotClass }}"></span>
-                                        {{ ucfirst($kth->status_verifikasi) }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-5">
-                                    @if ($kth->status_kth == 'Aktif')
-                                        <span
-                                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-primary">
-                                            <span
-                                                class="icon-[material-symbols--done-all] w-4 h-4 mr-1 text-primary"></span>
-                                            Aktif
+
+                                <td class="text-center px-6 py-4">
+                                    @if ($kth->kelas_kth == 'Utama')
+                                        <span class="items-center justify-center px-3 bg-red-100 rounded-lg inline-block">
+                                            <span class="text-red-700 text-xs font-semibold font-inter leading-4">
+                                                Utama
+                                            </span>
                                         </span>
-                                    @else
+                                    @elseif($kth->kelas_kth == 'Madya')
+                                        <span class="items-center justify-center px-3 bg-red-100 rounded-lg inline-block">
+                                            <span class="text-red-700 text-xs font-semibold font-inter leading-4">
+                                                Madya
+                                            </span>
+                                        </span>
+                                    @elseif($kth->kelas_kth == 'Pemula')
                                         <span
-                                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                                            <span class="icon-[ic--sharp-close] w-4 h-4 mr-1 text-red-800"></span>
-                                            Tidak Aktif
+                                            class="items-center justify-center px-3 bg-green-100 rounded-lg inline-block">
+                                            <span class="text-green-700 text-xs font-semibold font-inter leading-4">
+                                                Pemula
+                                            </span>
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-5 text-[#404943]">{{ $kth->kecamatan ?? '-' }}</td>
+
+                                <!-- Status KTH -->
+                                <td class="text-center px-6 py-4">
+                                    @if ($kth->status_kth == 'Aktif')
+                                        <span
+                                            class="px-2.5 py-0.5 bg-green-100 rounded-full inline-flex items-center gap-1.5">
+                                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                            <span
+                                                class="text-green-800 text-xs font-medium font-inter leading-4">Aktif</span>
+                                        </span>
+                                    @else
+                                        <span
+                                            class="px-2.5 py-0.5 bg-slate-100 rounded-full inline-flex items-center gap-1.5">
+                                            <span class="w-1.5 h-1.5 bg-slate-400 rounded-full"></span>
+                                            <span class="text-slate-600 text-xs font-medium font-inter leading-4">Tidak
+                                                Aktif</span>
+                                        </span>
+                                    @endif
+                                </td>
+
+                                <!-- Status Verifikasi -->
+                                <td class="text-center px-6 py-4">
+                                    @if ($kth->status_verifikasi == 'verified')
+                                        <span class="px-2 py-1 bg-primary/10 rounded-lg inline-flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5 text-primary" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span
+                                                class="text-primary text-xs font-semibold font-inter leading-4">Verified</span>
+                                        </span>
+                                    @elseif($kth->status_verifikasi == 'pending')
+                                        <span class="px-2 py-1 bg-amber-100 rounded-lg inline-flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5 text-amber-800" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span
+                                                class="text-amber-800 text-xs font-semibold font-inter leading-4">Menunggu</span>
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-1 bg-red-100 rounded-lg inline-flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5 text-red-800" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span
+                                                class="text-red-800 text-xs font-semibold font-inter leading-4">Ditolak</span>
+                                        </span>
+                                    @endif
+                                </td>
+
+                                <!-- Kecamatan -->
+                                <td class="text-center px-6 py-4">
+                                    <span
+                                        class="text-neutral-700 text-sm font-normal font-inter">{{ $kth->kecamatan }}</span>
+                                </td>
+
                                 <td class="px-6 py-5">
                                     <div class="flex items-center justify-center gap-2">
-
-                                        <button onclick="openDetailKTHModal({{ $kth->id }})"
-                                            class="text-neutral hover:outline-2 hover:outline-primary hover:text-primary hover:bg-neutral bg-primary rounded-lg p-2 transition-all duration-200"
+                                        <button onclick="openDetailKTHPenyuluhModal({{ $kth->id }})"
+                                            class="text-neutral hover:outline-2 hover:outline-yellow-500 hover:text-yellow-500 hover:bg-neutral bg-yellow-500 rounded-lg p-2 transition-all duration-200"
                                             title="Detail">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -314,53 +466,20 @@
                     </div>
                 </div>
             @endif
-        </div>
-
-        {{-- Info Cards --}}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-white rounded-3xl border border-[#e0e0e0] p-5 shadow-sm">
-                <div class="flex items-start gap-3">
-                    <svg class="w-8 h-8 text-[#4f6359]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <div>
-                        <h4 class="text-base font-normal text-[#4f6359]">Butuh Bantuan?</h4>
-                        <p class="text-sm text-[#55695f] mt-1">Hubungi administrator teknis jika<br>Anda mengalami kendala
-                            verifikasi<br>data KTH.</p>
-                    </div>
+            <!-- Pagination -->
+            <div
+                class="px-6 py-4 bg-zinc-100 border-t border-stone-300 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="text-neutral-700 text-sm font-normal font-inter leading-6">
+                    Menampilkan <span class="font-semibold">{{ $kths->firstItem() ?? 0 }}</span>
+                    dari <span class="font-semibold">{{ $kths->total() }}</span> KTH
                 </div>
-            </div>
-            <div class="bg-[#0e4c340d] rounded-3xl border border-[#0e4c341a] p-5 shadow-sm">
-                <div class="flex items-start gap-3">
-                    <svg class="w-8 h-8 text-[#0e4c34]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <div>
-                        <h4 class="text-base font-normal text-[#0e4c34]">Data Terkini</h4>
-                        <p class="text-sm text-[#404943] mt-1">Data KTH selalu diperbarui secara real-time<br>untuk
-                            memastikan informasi yang akurat.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-[#e7e8e9] rounded-3xl border border-[#c0c9c14c] p-5 shadow-sm">
-                <div class="flex items-start gap-3">
-                    <svg class="w-8 h-8 text-[#404943]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                        </path>
-                    </svg>
-                    <div>
-                        <h4 class="text-base font-normal text-[#404943]">Keamanan Data</h4>
-                        <p class="text-sm text-[#404943] mt-1">Seluruh data yang dimasukkan telah<br>dienkripsi dan sesuai
-                            dengan standar<br>privasi kehutanan.</p>
-                    </div>
+                <div>
+                    {{ $kths->appends(request()->query())->links('pagination::tailwind') }}
                 </div>
             </div>
         </div>
     </div>
-
+    @include('components.modal.penyuluh.modal-detail-kth', ['kth' => $kth ?? null])
     {{-- Script untuk reset filter --}}
     <script>
         function resetFilters() {

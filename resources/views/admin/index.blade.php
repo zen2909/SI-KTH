@@ -4,11 +4,13 @@
 
 @section('content')
     <div class="w-full space-y-6">
+
         {{-- Header --}}
-        <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-end justify-between gap-4">
             <div>
-                <h1 class="text-xl font-semibold text-zinc-900 font-poppins">Selamat Datang, {{ Auth::user()->name }}</h1>
-                <p class="text-base text-neutral-700 font-inter">Berikut ringkasan operasional sistem SI-KTH hari ini.</p>
+                <h1 class="text-3xl font-semibold text-primary font-poppins">Selamat Datang, {{ Auth::user()->name }}</h1>
+                <p class="text-base text-neutral-700 font-inter mt-1">Berikut ringkasan operasional sistem SI-KTH hari ini.
+                </p>
             </div>
             <div class="flex items-center gap-3">
                 <div class="flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl shadow border border-stone-300">
@@ -25,137 +27,142 @@
         {{-- Kartu Statistik --}}
         {{-- Baris 1: 3 Kartu (Total User, Total KTH, Total Laporan) --}}
         <div class="grid grid-cols-3 gap-4">
-            {{-- Total User --}}
-            <div class="p-6 bg-white rounded-3xl shadow border border-stone-300/20">
-                <div class="flex items-center">
+            {{-- Total User - BLUE --}}
+            <div class="p-6 bg-white rounded-3xl shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)] border-l-4 border-l-blue-500">
+                <div class="flex items-center justify-between">
                     <div class="p-3 bg-blue-100 rounded-xl">
-                        <svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
                             </path>
                         </svg>
                     </div>
-                    <span class="text-blue-700 text-sm font-normal bg-blue-50 rounded-full px-2 py-1 ml-2">Total
-                        Pengguna</span>
+                    <span class="text-blue-600 text-sm font-inter bg-blue-50 rounded-full px-2 py-1 ml-2">Total
+                        keseluruhan</span>
                 </div>
                 <div class="mt-5">
-                    <p class="text-xs font-bold text-neutral-700 uppercase tracking-tight">Total User</p>
-                    <p class="text-3xl font-bold text-blue-700">{{ number_format($totalUser) }}</p>
+                    <p class="text-xs font-bold text-blue-600 uppercase tracking-tight">Total Pengguna</p>
+                    <p class="text-3xl font-bold text-blue-600">{{ number_format($totalUser) }}</p>
                 </div>
             </div>
 
-            {{-- Total KTH --}}
-            <div class="p-6 bg-white rounded-3xl shadow border border-stone-300/20">
+            {{-- Total KTH - ROSE/RED --}}
+            <div class="p-6 bg-white rounded-3xl shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)] border-l-4 border-l-rose-500">
                 <div class="flex items-center justify-between">
-                    <div class="p-3 bg-blue-100 rounded-xl">
-                        <svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 bg-rose-100 rounded-xl">
+                        <svg class="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
                             </path>
                         </svg>
                     </div>
-                    <span class="text-blue-700 text-sm font-normal bg-blue-50 rounded-full px-2 py-1">Total KTH</span>
+                    <span class="text-rose-600 text-sm font-inter  bg-rose-50 rounded-full px-2 py-1">Total
+                        keseluruhan</span>
                 </div>
                 <div class="mt-5">
-                    <p class="text-xs font-bold text-neutral-700 uppercase tracking-tight">Total KTH</p>
-                    <p class="text-3xl font-bold text-blue-700">{{ number_format($totalKTH) }}</p>
+                    <p class="text-xs font-bold text-rose-600 uppercase tracking-tight">Total KTH</p>
+                    <p class="text-3xl font-bold text-rose-600">{{ number_format($totalKTH) }}</p>
                 </div>
             </div>
 
-            {{-- Total Laporan --}}
-            <div class="p-6 bg-white rounded-3xl shadow border border-stone-300/20">
+            {{-- Total Laporan - PURPLE --}}
+            <div
+                class="p-6 bg-white rounded-3xl shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)] border-l-4 border-l-purple-500">
                 <div class="flex items-center justify-between">
-                    <div class="p-3 bg-blue-100 rounded-xl">
-                        <svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 bg-purple-100 rounded-xl">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                             </path>
                         </svg>
                     </div>
-                    <span class="text-blue-700 text-sm font-normal bg-blue-50 rounded-full px-2 py-1">Total Laporan</span>
+                    <span class="text-purple-600 text-sm font-inter  bg-purple-50 rounded-full px-2 py-1">Total
+                        keseluruhan</span>
                 </div>
                 <div class="mt-5">
-                    <p class="text-xs font-bold text-neutral-700 uppercase tracking-tight">Total Laporan</p>
-                    <p class="text-3xl font-bold text-blue-700">{{ number_format($totalLaporan) }}</p>
+                    <p class="text-xs font-bold text-purple-600 uppercase tracking-tight">Total Laporan</p>
+                    <p class="text-3xl font-bold text-purple-600">{{ number_format($totalLaporan) }}</p>
                 </div>
             </div>
         </div>
 
         {{-- Baris 2: 4 Kartu (KTH Pending, KTH Verified, Laporan Pending, Laporan Verified) --}}
         <div class="grid grid-cols-4 gap-4 mt-4">
-            {{-- KTH Pending --}}
-            <div class="p-6 bg-white rounded-3xl shadow border border-stone-300/20">
+            {{-- KTH Pending - AMBER --}}
+            <div class="p-6 bg-white rounded-3xl shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)] border-l-4 border-l-amber-500">
                 <div class="flex items-center justify-between">
-                    <div class="p-3 bg-yellow-100 rounded-xl">
-                        <svg class="w-6 h-6 text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 bg-amber-100 rounded-xl">
+                        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
                             </path>
                         </svg>
                     </div>
-                    <span class="text-yellow-700 text-sm font-normal bg-yellow-100/50 rounded-full px-2 py-1">Butuh
-                        Verifikasi</span>
+                    <span class="text-amber-600 text-sm font-inter  bg-amber-50 rounded-full px-2 py-1">Menunggu
+                        derifikasi</span>
                 </div>
                 <div class="mt-5">
-                    <p class="text-xs font-bold text-neutral-700 uppercase tracking-tight">KTH Pending</p>
-                    <p class="text-3xl font-bold text-yellow-700">{{ number_format($kthPending) }}</p>
+                    <p class="text-xs font-bold text-amber-600 uppercase tracking-tight">KTH Pending</p>
+                    <p class="text-3xl font-bold text-amber-600">{{ number_format($kthPending) }}</p>
                 </div>
             </div>
 
-            {{-- KTH Verified --}}
-            <div class="p-6 bg-white rounded-3xl shadow border border-stone-300/20">
+            {{-- KTH Verified - EMERALD --}}
+            <div
+                class="p-6 bg-white rounded-3xl shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)] border-l-4 border-l-emerald-500">
                 <div class="flex items-center justify-between">
-                    <div class="p-3 bg-emerald-900/10 rounded-xl">
-                        <svg class="w-6 h-6 text-emerald-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 bg-emerald-100 rounded-xl">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
                             </path>
                         </svg>
                     </div>
-                    <span class="text-emerald-900 text-sm font-normal bg-emerald-900/5 rounded-full px-2 py-1">Sudah
-                        Diverifikasi</span>
+                    <span class="text-emerald-600 text-sm font-inter  bg-emerald-50 rounded-full px-2 py-1">Sudah
+                        diverifikasi</span>
                 </div>
                 <div class="mt-5">
-                    <p class="text-xs font-bold text-neutral-700 uppercase tracking-tight">KTH Verified</p>
-                    <p class="text-3xl font-bold text-emerald-900">{{ number_format($kthVerified) }}</p>
+                    <p class="text-xs font-bold text-emerald-600 uppercase tracking-tight">KTH Verified</p>
+                    <p class="text-3xl font-bold text-emerald-600">{{ number_format($kthVerified) }}</p>
                 </div>
             </div>
 
-            {{-- Laporan Pending --}}
-            <div class="p-6 bg-white rounded-3xl shadow border border-stone-300/20">
+            {{-- Laporan Pending - AMBER --}}
+            <div class="p-6 bg-white rounded-3xl shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)] border-l-4 border-l-amber-500">
                 <div class="flex items-center justify-between">
-                    <div class="p-3 bg-yellow-100 rounded-xl">
-                        <svg class="w-6 h-6 text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 bg-amber-100 rounded-xl">
+                        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                             </path>
                         </svg>
                     </div>
-                    <span class="text-yellow-700 text-sm font-normal bg-yellow-100/50 rounded-full px-2 py-1 ml-2">Antrian
-                        Verifikasi</span>
+                    <span class="text-amber-600 text-sm font-inter  bg-amber-50 rounded-full px-2 py-1 ml-2">Menunggu
+                        verifikasi</span>
                 </div>
                 <div class="mt-5">
-                    <p class="text-xs font-bold text-neutral-700 uppercase tracking-tight">Laporan Pending</p>
-                    <p class="text-3xl font-bold text-yellow-700">{{ number_format($laporanPending) }}</p>
+                    <p class="text-xs font-bold text-amber-600 uppercase tracking-tight">Laporan Pending</p>
+                    <p class="text-3xl font-bold text-amber-600">{{ number_format($laporanPending) }}</p>
                 </div>
             </div>
 
-            {{-- Laporan Verified --}}
-            <div class="p-6 bg-white rounded-3xl shadow border border-stone-300/20">
+            {{-- Laporan Verified - EMERALD --}}
+            <div
+                class="p-6 bg-white rounded-3xl shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)] border-l-4 border-l-emerald-500">
                 <div class="flex items-center justify-between">
-                    <div class="p-3 bg-emerald-900/10 rounded-xl">
-                        <svg class="w-6 h-6 text-emerald-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 bg-emerald-100 rounded-xl">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
                             </path>
                         </svg>
                     </div>
-                    <span
-                        class="text-emerald-900 text-sm font-normal bg-emerald-900/5 rounded-full px-2 py-1 ml-2">Terverifikasi</span>
+                    <span class="text-emerald-600 text-sm font-inter  bg-emerald-50 rounded-full px-2 py-1 ml-2">Sudah
+                        diverifikasi</span>
                 </div>
                 <div class="mt-5">
-                    <p class="text-xs font-bold text-neutral-700 uppercase tracking-tight">Laporan Verified</p>
-                    <p class="text-3xl font-bold text-emerald-900">{{ number_format($laporanVerified) }}</p>
+                    <p class="text-xs font-bold text-emerald-600 uppercase tracking-tight">Laporan Verified</p>
+                    <p class="text-3xl font-bold text-emerald-600">{{ number_format($laporanVerified) }}</p>
                 </div>
             </div>
         </div>
@@ -165,7 +172,7 @@
             {{-- Distribusi Status KTH (kiri) --}}
             <div class="bg-white rounded-2xl shadow p-4 border border-[#e1e3e433]">
                 <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-medium text-primary">Distribusi Status KTH</h2>
+                    <h2 class="text-lg font-semibold text-zinc-900">Distribusi Status KTH</h2>
                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z">
@@ -177,27 +184,27 @@
                     <div class="relative w-48 h-48">
                         <div class="absolute inset-0 flex flex-col items-center justify-center">
                             <span
-                                class="text-2xl font-bold text-primary leading-none">{{ number_format($totalKTH) }}</span>
+                                class="text-2xl font-bold text-zinc-900 leading-none">{{ number_format($totalKTH) }}</span>
                             <span
-                                class="text-md font-inter font-semibold text-[#404943] tracking-widest mt-0.5">TOTAL</span>
+                                class="text-md font-inter font-semibold text-zinc-900 tracking-widest mt-0.5">TOTAL</span>
                         </div>
                         <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90">
                             <circle cx="60" cy="60" r="54" fill="none" stroke="#e5e7eb"
                                 stroke-width="12" />
                             @if ($verifiedPercent > 0)
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="#0e4c34"
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#2B644A"
                                     stroke-width="12"
                                     stroke-dasharray="{{ $verifiedPercent }} {{ 100 - $verifiedPercent }}"
                                     stroke-dashoffset="0" />
                             @endif
                             @if ($pendingPercent > 0)
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="#eab308"
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#D97706"
                                     stroke-width="12"
                                     stroke-dasharray="{{ $pendingPercent }} {{ 100 - $pendingPercent }}"
                                     stroke-dashoffset="-{{ $verifiedPercent }}" />
                             @endif
                             @if ($rejectedPercent > 0)
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="#ba1a1a"
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#DC2626"
                                     stroke-width="12"
                                     stroke-dasharray="{{ $rejectedPercent }} {{ 100 - $rejectedPercent }}"
                                     stroke-dashoffset="-{{ $verifiedPercent + $pendingPercent }}" />
@@ -208,8 +215,8 @@
                     <div class="flex-1 space-y-2">
                         <div>
                             <div class="flex justify-between text-sm">
-                                <span class="font-semibold text-[#191c1d]">Verified</span>
-                                <span class="text-xs text-[#404943]">{{ $verifiedPercent }}%
+                                <span class="font-semibold text-[#2B644A]">Verified</span>
+                                <span class="text-xs text-[#2B644A]">{{ $verifiedPercent }}%
                                     ({{ number_format($kthVerified) }} KTH)</span>
                             </div>
                             <div class="w-full h-3 bg-gray-200 rounded-full">
@@ -218,8 +225,8 @@
                         </div>
                         <div>
                             <div class="flex justify-between text-sm">
-                                <span class="font-semibold text-[#191c1d]">Pending</span>
-                                <span class="text-xs text-[#404943]">{{ $pendingPercent }}%
+                                <span class="font-semibold text-[#D97706]">Pending</span>
+                                <span class="text-xs text-[#D97706]">{{ $pendingPercent }}%
                                     ({{ number_format($kthPending) }} KTH)</span>
                             </div>
                             <div class="w-full h-3 bg-gray-200 rounded-full">
@@ -228,8 +235,8 @@
                         </div>
                         <div>
                             <div class="flex justify-between text-sm">
-                                <span class="font-semibold text-[#191c1d]">Rejected</span>
-                                <span class="text-xs text-[#404943]">{{ $rejectedPercent }}%
+                                <span class="font-semibold text-[#DC2626]">Rejected</span>
+                                <span class="text-xs text-[#DC2626]">{{ $rejectedPercent }}%
                                     ({{ number_format($kthRejected) }} KTH)</span>
                             </div>
                             <div class="w-full h-3 bg-gray-200 rounded-full">
@@ -243,7 +250,7 @@
             {{-- Grafik Laporan per Bulan (kanan) --}}
             <div class="bg-white rounded-2xl shadow p-4 border border-[#e1e3e433]">
                 <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-medium text-primary">Grafik Laporan per Bulan</h2>
+                    <h2 class="text-lg font-semibold text-zinc-900">Grafik Laporan per Bulan</h2>
                     <span
                         class="text-xs font-normal text-primary bg-[#0e4c341a] rounded-full border border-[#0e4c3433] px-3 py-1">{{ now()->year }}</span>
                 </div>
@@ -307,7 +314,7 @@
         {{-- Aktivitas Terbaru --}}
         <div class="bg-white rounded-[32px] shadow border border-stone-300/20 overflow-hidden">
             <div class="px-8 py-6 border-b border-stone-300/30 flex items-center justify-between">
-                <h3 class="text-base font-medium text-zinc-900 font-poppins">Aktivitas Terbaru</h3>
+                <h3 class="text-base font-semibold text-zinc-900 font-poppins">Aktivitas Terbaru</h3>
                 <a href="#" class="text-emerald-900 text-sm font-inter hover:underline">Lihat Semua</a>
             </div>
             <div class="overflow-x-auto">

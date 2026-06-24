@@ -68,10 +68,10 @@ class KTHController extends Controller
     }
 
     public function show($id)
-    {
-        $kth = Kth::with('penyuluh')->findOrFail($id);
-        return response()->json($kth);
-    }
+{
+    $kth = Kth::with(['penyuluh', 'laporanKth'])->findOrFail($id);
+    return response()->json($kth);
+}
 
     public function destroy($id)
     {

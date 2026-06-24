@@ -49,8 +49,8 @@
                         {{ $user->email }}</p>
 
                     {{-- Role Badge --}}
-                    <div class="mt-3 px-4 py-1.5 bg-blue-100 rounded-full">
-                        <span class="text-blue-800 text-sm font-medium font-inter">
+                    <div class="mt-3 px-4 py-1.5 bg-red-100 rounded-full">
+                        <span class="text-red-800 text-sm font-medium font-inter">
                             {{ ucfirst($user->role) }}
                         </span>
                     </div>
@@ -85,7 +85,7 @@
                         <h2 class="text-zinc-900 text-lg font-medium font-poppins leading-7">Informasi Dasar</h2>
                     </div>
 
-                    <form action="{{ route('admin.profile.update') }}" method="POST" class="flex flex-col gap-6">
+                    <form action="{{ route('pimpinan.profile.update') }}" method="POST" class="flex flex-col gap-6">
                         @csrf
                         @method('PUT')
 
@@ -138,7 +138,7 @@
                         </h2>
                     </div>
 
-                    <form action="{{ route('admin.profile.password') }}" method="POST" class="flex flex-col gap-6">
+                    <form action="{{ route('pimpinan.profile.password') }}" method="POST" class="flex flex-col gap-6">
                         @csrf
                         @method('PUT')
 

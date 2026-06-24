@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Verifikasi Laporan')
+@section('title', 'Verifikasi Laporan KTH')
 
 @section('content')
     <div class="w-full space-y-6">
@@ -62,75 +62,88 @@
                 <table class="w-full">
                     <thead class="bg-zinc-100 border-b border-stone-300">
                         <tr>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-neutral-700 uppercase tracking-wide">Nama
+                            <th class="px-6 py-4 text-left text-sm font-bold text-primary uppercase tracking-wide">Nama
                                 KTH</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-neutral-700 uppercase tracking-wide">
+                            <th class="px-6 py-4 text-center text-sm font-bold text-primary uppercase tracking-wide">
                                 Periode</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-neutral-700 uppercase tracking-wide">Jenis
+                            <th class="px-6 py-4 text-left text-sm font-bold text-primary uppercase tracking-wide">Jenis
                                 Usaha</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-neutral-700 uppercase tracking-wide">
+                            <th class="px-6 py-4 text-center text-sm font-bold text-primary uppercase tracking-wide">
                                 Status KTH</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-neutral-700 uppercase tracking-wide">
+                            <th class="px-6 py-4 text-center text-sm font-bold text-primary uppercase tracking-wide">
                                 Status Laporan</th>
-                            <th class="px-6 py-4 text-center text-sm font-bold text-neutral-700 uppercase tracking-wide">
+                            <th class="px-6 py-4 text-center text-sm font-bold text-primary uppercase tracking-wide">
                                 Aksi
                             </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-stone-300">
                         @forelse($laporans as $laporan)
-                            @php
-                                $kthVerified = $laporan->kth && $laporan->kth->status_verifikasi == 'verified';
-                                $kthStatus = $laporan->kth ? $laporan->kth->status_verifikasi : 'Tidak Diketahui';
-                            @endphp
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="px-6 py-4">
                                     <span
                                         class="text-base font-medium text-zinc-900">{{ $laporan->kth->nama_kth ?? '-' }}</span>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="text-center px-6 py-4">
                                     <span
                                         class="text-base text-zinc-600">{{ $laporan->periode_laporan ? \Carbon\Carbon::parse($laporan->periode_laporan)->format('d M Y') : '-' }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="text-base text-neutral-700">{{ $laporan->jenis_usaha ?? '-' }}</span>
                                 </td>
-                                <td class="px-6 py-4">
-                                    @if ($kthVerified)
-                                        <span
-                                            class="inline-flex items-center gap-1.5 p-4 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                            Verified
+                                <td class="text-center px-6 py-4">
+                                    @if ($laporan->kth->status_verifikasi == 'verified')
+                                        <span class="px-2 py-1 bg-primary/10 rounded-lg inline-flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span
+                                                class="text-primary text-xs font-semibold font-inter leading-4">Verified</span>
                                         </span>
-                                    @elseif($kthStatus == 'rejected')
-                                        <span
-                                            class="inline-flex items-center gap-1.5 p-4 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                                            Rejected
+                                    @elseif($laporan->kth->status_verifikasi == 'pending')
+                                        <span class="px-2 py-1 bg-amber-100 rounded-lg inline-flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5 text-amber-800" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span
+                                                class="text-amber-800 text-xs font-semibold font-inter leading-4">Pending</span>
                                         </span>
                                     @else
-                                        <span
-                                            class="inline-flex items-center gap-1.5 p-4 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
-                                            Pending
+                                        <span class="px-2 py-1 bg-red-100 rounded-lg inline-flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5 text-red-800" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span
+                                                class="text-red-800 text-xs font-semibold font-inter leading-4">Rejected</span>
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="inline-flex items-center gap-1.5 p-4 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
-                                        Pending
+                                <td class=" text-center px-6 py-4">
+                                    <span class="px-2 py-1 bg-amber-100 rounded-lg inline-flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5 text-amber-800" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span
+                                            class="text-amber-800 text-xs font-semibold font-inter leading-4">Pending</span>
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
                                         {{-- Tombol Setujui & Tolak (hanya jika KTH verified) --}}
-                                        @if ($kthVerified)
+                                        @if ($laporan->kth->status_verifikasi == 'verified')
                                             <button type="button"
                                                 onclick="openApproveLaporanModal({{ $laporan->id }}, '{{ $laporan->periode_laporan ? \Carbon\Carbon::parse($laporan->periode_laporan)->format('F Y') : '-' }}', '{{ addslashes($laporan->kth->nama_kth ?? '') }}', function(id) { approveLaporan(id); })"
                                                 class="text-neutral hover:outline-2 hover:outline-primary hover:text-primary hover:bg-neutral bg-primary rounded-lg p-2 transition-all duration-200">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
+                                                    viewBox="0 0 24 24">
                                                     <path d="M0 0h24v24H0z" fill="none" />
                                                     <path fill="currentColor"
                                                         d="M21 7L9 19l-5.5-5.5l1.41-1.41L9 16.17L19.59 5.59z" />
@@ -140,7 +153,8 @@
                                             <button type="button"
                                                 onclick="openRejectLaporanModal({{ $laporan->id }}, '{{ $laporan->periode_laporan ? \Carbon\Carbon::parse($laporan->periode_laporan)->format('F Y') : '-' }}', '{{ addslashes($laporan->kth->nama_kth ?? '') }}')"
                                                 class="text-neutral hover:outline-2 hover:outline-red-500 hover:text-red-500 hover:bg-neutral bg-red-500 rounded-lg p-2 transition-all duration-200">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
+                                                    viewBox="0 0 24 24">
                                                     <path d="M0 0h24v24H0z" fill="none" />
                                                     <path fill="currentColor"
                                                         d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
@@ -150,7 +164,8 @@
                                             {{-- Tombol Detail --}}
                                             <button type="button" onclick="openDetailLaporanAdmin({{ $laporan->id }})"
                                                 class="text-neutral hover:outline-2 hover:outline-yellow-500 hover:text-yellow-500 hover:bg-neutral bg-yellow-500 rounded-lg p-2 transition-all duration-200">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
+                                                    viewBox="0 0 24 24">
                                                     <path d="M0 0h24v24H0z" fill="none" />
                                                     <path fill="currentColor"
                                                         d="M12 9a3 3 0 0 1 3 3a3 3 0 0 1-3 3a3 3 0 0 1-3-3a3 3 0 0 1 3-3m0-4.5c5 0 9.27 3.11 11 7.5c-1.73 4.39-6 7.5-11 7.5S2.73 16.39 1 12c1.73-4.39 6-7.5 11-7.5M3.18 12a9.821 9.821 0 0 0 17.64 0a9.821 9.821 0 0 0-17.64 0" />
@@ -159,7 +174,8 @@
                                         @else
                                             {{-- Keterangan jika KTH belum verified --}}
                                             <span class="text-xs text-gray-400 italic">
-                                                KTH {{ $kthStatus == 'rejected' ? 'Rejected' : 'Pending' }}
+                                                KTH
+                                                {{ $laporan->kth->status_verifikasi == 'rejected' ? 'Rejected' : 'Pending' }}
                                             </span>
                                         @endif
 
@@ -186,18 +202,17 @@
                 </table>
             </div>
 
-            {{-- Pagination --}}
-            @if ($laporans->hasPages())
-                <div
-                    class="px-6 py-4 bg-white border-t border-stone-300 flex flex-wrap items-center justify-between gap-3">
-                    <p class="text-sm text-neutral-700">
-                        Menampilkan {{ $laporans->firstItem() ?? 0 }} dari {{ $laporans->total() }} data laporan
-                    </p>
-                    <div class="flex items-center gap-2">
-                        {{ $laporans->links() }}
-                    </div>
+            <!-- Pagination -->
+            <div
+                class="px-6 py-4 bg-zinc-100 border-t border-stone-300 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="text-neutral-700 text-sm font-normal font-inter leading-6">
+                    Menampilkan <span class="font-semibold">{{ $laporans->firstItem() ?? 0 }}</span>
+                    dari <span class="font-semibold">{{ $laporans->total() }}</span> Laporan
                 </div>
-            @endif
+                <div>
+                    {{ $laporans->appends(request()->query())->links('pagination::tailwind') }}
+                </div>
+            </div>
         </div>
     </div>
 

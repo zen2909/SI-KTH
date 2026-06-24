@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\LaporanController as LaporanAdminController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\ProfileController as ProfileAdminController;
 use App\Http\Controllers\Pimpinan\DashboardController as PimpinanDashboard;
+use App\Http\Controllers\Pimpinan\KTHController as KTHPimpinanController;
+use App\Http\Controllers\Pimpinan\ProfileController as ProfilePimpinanController;
+use App\Http\Controllers\Pimpinan\LaporanController as LaporanPimpinanController;
 use App\Http\Controllers\Penyuluh\DashboardController as PenyuluhDashboard;
 use App\Http\Controllers\Penyuluh\KTHController as KTHPenyuluhController;
 use App\Http\Controllers\Penyuluh\LaporanController as LaporanPenyuluh;
@@ -26,8 +29,10 @@ Route::get('/', function () {
             return redirect()->route('pimpinan.dashboard');
         }
     }
-    return redirect()->route('login');
-});
+    // Belum login -> langsung ke login penyuluh
+    return redirect()->route('login.penyuluh');
+})->name('home');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -85,6 +90,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware('role:pimpinan')->prefix('pimpinan')->group(function () {
         Route::get('/dashboard', [PimpinanDashboard::class, 'index'])->name('pimpinan.dashboard');
+        Route::get('/kth/map-data', [PimpinanDashboard::class, 'mapData'])->name('kth.map-data');
+        Route::get('/chart-data', [PimpinanDashboard::class, 'getChartData'])->name('pimpinan.chart-data');
+         Route::get('/kth', [KTHPimpinanController::class, 'index'])->name('pimpinan.kth.index');
+         Route::get('/kth/search', [KTHPimpinanController::class, 'search'])->name('pimpinan.kth.search');
+    Route::get('/kth/export-count', [KTHPimpinanController::class, 'exportCount'])->name('pimpinan.kth.export-count');
+    Route::post('/kth/export', [KTHPimpinanController::class, 'export'])->name('pimpinan.kth.export');
+    Route::get('/kth/{id}', [KTHPimpinanController::class, 'show'])->name('pimpinan.kth.show');
+    Route::get('/profile', [ProfilePimpinanController::class, 'index'])->name('pimpinan.profile.index');
+    Route::put('/profile', [ProfilePimpinanController::class, 'update'])->name('pimpinan.profile.update');
+    Route::put('/profile/password', [ProfilePimpinanController::class, 'updatePassword'])->name('pimpinan.profile.password');
+    Route::delete('/profile/photo', [ProfilePimpinanController::class, 'deletePhoto'])->name('pmipinan.profile.photo.delete'); 
+    Route::get('/laporan', [LaporanPimpinanController::class, 'index'])->name('pimpinan.laporan.index');
+    Route::get('/laporan/search', [LaporanPimpinanController::class, 'search'])->name('pimpinan.laporan.search');
+    Route::post('/laporan/export', [LaporanPimpinanController::class, 'export'])->name('pimpinan.laporan.export');
+    Route::get('/laporan/export-count', [LaporanPimpinanController::class, 'exportCount'])->name('pimpinan.laporan.export-count');  
+    Route::get('/laporan/{id}', [LaporanPimpinanController::class, 'show'])->name('pimpinan.laporan.show');
     });
 });
 

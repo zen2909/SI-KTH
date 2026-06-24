@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Laporan KTH')
+@section('title', 'Monitoring Laporan KTH')
 
 @section('content')
     <div class="w-full space-y-6">
@@ -9,11 +9,10 @@
             <div>
                 <h1 class="text-3xl font-semibold text-emerald-900 font-poppins">Daftar Laporan KTH</h1>
                 <p class="text-base text-neutral-700 font-inter mt-1">Kelola dan verifikasi seluruh laporan berkala dari
-                    Kelompok Tani Hutan di wilayah administratif Anda
-                    secara digital.</p>
+                    Kelompok Tani Hutan di wilayah administratif Anda secara digital.</p>
             </div>
             <div class="flex items-center gap-3">
-                <button type="button" onclick="openModalExportLaporan()"
+                <button type="button" onclick="openModalExportLaporanPimpinan()"
                     class="flex items-center gap-2 px-6 py-3 bg-emerald-900 rounded-xl text-white hover:bg-emerald-800 transition shadow">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -98,12 +97,12 @@
 
         {{-- Filter & Pencarian --}}
         <div class="bg-white rounded-3xl shadow p-4 flex flex-wrap items-center gap-3">
-            <form action="{{ route('penyuluh.kth.index') }}" method="GET"
+            <form action="{{ route('pimpinan.laporan.index') }}" method="GET"
                 class="flex flex-wrap items-center gap-3 w-full">
                 {{-- Search --}}
                 <div class="relative flex-1 min-w-[200px]">
                     <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="Cari nama KTH atau Periode Laporan..."
+                        placeholder="Cari nama KTH atau Jenis Usaha..."
                         class="w-full h-12 pl-12 pr-4 bg-[#f8f9fa] rounded-xl border border-[#c0c9c1] text-base focus:outline-none focus:ring-2 focus:ring-primary">
                     <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
@@ -158,8 +157,7 @@
                             <th class="px-6 py-4 text-center text-sm font-bold text-primary uppercase tracking-wide">
                                 Status Laporan</th>
                             <th class="px-6 py-4 text-center text-sm font-bold text-primary uppercase tracking-wide">
-                                Aksi
-                            </th>
+                                Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-stone-300">
@@ -248,34 +246,19 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 text-right">
-                                    <div class="flex items-center justify-end gap-2">
-                                        {{-- Tombol Detail --}}
-                                        <button type="button" onclick="openDetailLaporanAdminView({{ $laporan->id }})"
-                                            class="text-neutral hover:outline-2 hover:outline-yellow-500 hover:text-yellow-500 hover:bg-neutral bg-yellow-500 rounded-lg p-2 transition-all duration-200">
+                                <td class="px-6 py-4">
+                                    <div class="flex justify-center gap-2">
+
+                                        <button type="button"
+                                            onclick="openDetailLaporanPimpinanView({{ $laporan->id }})"
+                                            class="text-neutral hover:outline-2 hover:outline-yellow-500 hover:text-yellow-500 hover:bg-neutral bg-yellow-500 rounded-lg p-2 transition-all duration-200"
+                                            title="Lihat Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24">
                                                 <path d="M0 0h24v24H0z" fill="none" />
                                                 <path fill="currentColor"
                                                     d="M12 9a3 3 0 0 1 3 3a3 3 0 0 1-3 3a3 3 0 0 1-3-3a3 3 0 0 1 3-3m0-4.5c5 0 9.27 3.11 11 7.5c-1.73 4.39-6 7.5-11 7.5S2.73 16.39 1 12c1.73-4.39 6-7.5 11-7.5M3.18 12a9.821 9.821 0 0 0 17.64 0a9.821 9.821 0 0 0-17.64 0" />
                                             </svg>
                                         </button>
-
-                                        <button type="button"
-                                            onclick="openHapusLaporanAdminModal(
-                    {{ $laporan->id }}, 
-                    '{{ $laporan->periode_laporan ? $laporan->periode_laporan->format('M Y') : '-' }}', 
-                    '{{ addslashes($laporan->kth->nama_kth ?? '-') }}'
-                )"
-                                            class="text-neutral hover:outline-2 hover:outline-red-600 hover:bg-neutral bg-red-600 rounded-lg p-2 transition-all duration-200 hover:text-red-600 pt-1.5"
-                                            title="Hapus">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                </path>
-                                            </svg>
-                                        </button>
-
                                     </div>
                                 </td>
                             </tr>
@@ -310,90 +293,31 @@
             </div>
         </div>
     </div>
-    </div>
 
     @push('scripts')
         <script>
             // ============================================
-            // FUNGSI BUKA MODAL DETAIL LAPORAN
+            // FUNGSI RESET FILTER
             // ============================================
-            function openDetailLaporanModal(id) {
-                // Implementasi modal detail laporan
-                Swal.fire({
-                    title: 'Loading...',
-                    text: 'Mengambil data laporan',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
+            function resetFilters() {
+                window.location.href = window.location.pathname;
+            }
 
-                fetch(`/admin/laporan/${id}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        Swal.close();
-                        if (data.success) {
-                            // Tampilkan detail di modal atau SweetAlert
-                            const laporan = data.data;
-                            let html = `
-                        <div class="text-left">
-                            <p><strong>Periode:</strong> ${laporan.periode_laporan ? new Date(laporan.periode_laporan).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }) : '-'}</p>
-                            <p><strong>KTH:</strong> ${laporan.kth?.nama_kth || '-'}</p>
-                            <p><strong>Jenis Usaha:</strong> ${laporan.jenis_usaha || '-'}</p>
-                            <p><strong>Status Verifikasi:</strong> ${laporan.status_verifikasi || '-'}</p>
-                            <p><strong>NIB:</strong> ${laporan.nib || '-'}</p>
-                            <p><strong>PIRT:</strong> ${laporan.pirt || '-'}</p>
-                            <p><strong>Merek Dagang:</strong> ${laporan.merek_dagang || '-'}</p>
-                            <p><strong>Potensi Produksi:</strong> ${laporan.potensi_produksi || '-'} ${laporan.satuan_produksi || ''}</p>
-                            <p><strong>NTE per Bulan:</strong> ${laporan.nte_per_bulan || '-'}</p>
-                            <p><strong>Jangkauan Pemasaran:</strong> ${laporan.jangkauan_pemasaran || '-'}</p>
-                            <p><strong>Kendala Usaha:</strong> ${laporan.kendala_usaha || '-'}</p>
-                            <p><strong>Kebutuhan Pengembangan:</strong> ${laporan.kebutuhan_pengembangan || '-'}</p>
-                            <p><strong>Keterangan Tambahan:</strong> ${laporan.keterangan_tambahan || '-'}</p>
-                            ${laporan.catatan_revisi ? `<p><strong>Catatan Revisi:</strong> ${laporan.catatan_revisi}</p>` : ''}
-                            ${laporan.sertifikat_halal_file ? `<p><strong>Sertifikat Halal:</strong> <a href="/storage/${laporan.sertifikat_halal_file}" target="_blank" class="text-emerald-900 underline">Lihat File</a></p>` : ''}
-                        </div>
-                    `;
-                            Swal.fire({
-                                title: 'Detail Laporan',
-                                html: html,
-                                icon: 'info',
-                                confirmButtonText: 'Tutup',
-                                confirmButtonColor: '#0E4C34',
-                            });
+            // ============================================
+            // FUNGSI BUKA MODAL EXPORT LAPORAN PIMPINAN
+            // ============================================
+            window.openModalExportLaporanPimpinan = function() {
+                var modal = document.getElementById('modalExportLaporanPimpinan');
+                if (modal) {
+                    modal.showModal();
+                    document.body.classList.add('no-scroll');
+                    setTimeout(function() {
+                        if (typeof updateTotalLaporanPimpinan === 'function') {
+                            updateTotalLaporanPimpinan();
                         }
-                    })
-                    .catch(error => {
-                        Swal.close();
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Gagal mengambil data laporan',
-                            icon: 'error',
-                            confirmButtonText: 'Tutup'
-                        });
-                    });
-            }
-
-            // ============================================
-            // FUNGSI BUKA MODAL HAPUS LAPORAN
-            // ============================================
-            function openHapusLaporanModal(id, namaLaporan) {
-                Swal.fire({
-                    title: 'Konfirmasi Hapus',
-                    text: `Apakah Anda yakin ingin menghapus laporan "${namaLaporan}"?`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc2626',
-                    cancelButtonColor: '#6b7280',
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal',
-                    reverseButtons: true,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById('delete-form-' + id).submit();
-                    }
-                });
-            }
+                    }, 300);
+                }
+            };
         </script>
     @endpush
 @endsection
