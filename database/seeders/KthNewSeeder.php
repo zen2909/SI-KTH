@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Kth;
+use App\Models\Penyuluh;
 use Illuminate\Database\Seeder;
 
 class KthNewSeeder extends Seeder
@@ -12,16 +13,13 @@ class KthNewSeeder extends Seeder
      */
     public function run(): void
     {
-        // Daftar id_penyuluh
-        $penyuluhIds = [
-            1, 9, 10, 11, 12, 13, 14, 15, 16, 17, 
-            18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
-        ];
+        // Ambil semua penyuluh yang ada di database
+        $penyuluhs = Penyuluh::all();
 
         // Data KTH untuk setiap penyuluh (3 data per penyuluh)
         $kths = [];
 
-        foreach ($penyuluhIds as $index => $id_penyuluh) {
+        foreach ($penyuluhs as $index => $penyuluh) {
             // Status verifikasi: pending, verified, rejected
             $statuses = ['pending', 'verified', 'rejected'];
             
@@ -170,6 +168,7 @@ class KthNewSeeder extends Seeder
                 ];
 
                 // Hitung index untuk memilih nama yang berbeda
+                $id_penyuluh = $penyuluh->id;
                 $nameIndex = ($id_penyuluh + $statusIndex) % count($namaKthOptions[$status]);
                 $ketuaIndex = ($id_penyuluh + $statusIndex * 2) % count($namaKetuaOptions);
                 $kecIndex = ($id_penyuluh + $statusIndex * 3) % count($kecamatanOptions);

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Penyuluh;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class PenyuluhNewSeeder extends Seeder
@@ -14,7 +15,7 @@ class PenyuluhNewSeeder extends Seeder
     {
         $penyuluhs = [
             [
-                'user_id' => 16,
+                'email_user' => 'slamet.riyadi@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Dr. Ir. Slamet Riyadi, M.Si',
                 'nip' => '197501011999031001',
                 'golongan_pangkat' => 'IV/b - Pembina Tk I',
@@ -29,7 +30,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Sumenep Selatan',
             ],
             [
-                'user_id' => 17,
+                'email_user' => 'siti.aisyah@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Ir. Siti Aisyah, M.P',
                 'nip' => '197803151999032002',
                 'golongan_pangkat' => 'IV/a - Pembina',
@@ -44,7 +45,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Sumenep Utara',
             ],
             [
-                'user_id' => 18,
+                'email_user' => 'ahmad.subandi@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Drs. Ahmad Subandi, S.Hut',
                 'nip' => '198005101999031003',
                 'golongan_pangkat' => 'III/d - Penata Tk I',
@@ -59,7 +60,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Kalianget',
             ],
             [
-                'user_id' => 19,
+                'email_user' => 'mohammad.ali@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Ir. Mohammad Ali, M.M',
                 'nip' => '198207202000031004',
                 'golongan_pangkat' => 'III/c - Penata',
@@ -74,7 +75,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Bluto',
             ],
             [
-                'user_id' => 20,
+                'email_user' => 'suharto@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Dra. Suharto, M.Si',
                 'nip' => '198410152000032005',
                 'golongan_pangkat' => 'III/c - Penata',
@@ -89,7 +90,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Dungkek',
             ],
             [
-                'user_id' => 21,
+                'email_user' => 'sutrisno@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Ir. Sutrisno, M.P',
                 'nip' => '198601052001031006',
                 'golongan_pangkat' => 'III/b - Penata Muda Tk I',
@@ -104,7 +105,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Gapura',
             ],
             [
-                'user_id' => 22,
+                'email_user' => 'siti.aisyah2@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Dra. Siti Aisyah, S.Hut',
                 'nip' => '198703152001032007',
                 'golongan_pangkat' => 'III/b - Penata Muda Tk I',
@@ -119,7 +120,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Batuputih',
             ],
             [
-                'user_id' => 23,
+                'email_user' => 'fahrur.muhammad@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Drs. Muhammad Fahrur, M.Si',
                 'nip' => '198806102002031008',
                 'golongan_pangkat' => 'III/a - Penata Muda',
@@ -134,7 +135,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Ganding',
             ],
             [
-                'user_id' => 24,
+                'email_user' => 'junaidi@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Ir. Junaidi, S.Hut',
                 'nip' => '199010152003031009',
                 'golongan_pangkat' => 'III/a - Penata Muda',
@@ -149,7 +150,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Banyuates',
             ],
             [
-                'user_id' => 25,
+                'email_user' => 'karsono@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Dra. Karsono, M.Pd',
                 'nip' => '199203202004031010',
                 'golongan_pangkat' => 'III/a - Penata Muda',
@@ -164,7 +165,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Kota Sumenep',
             ],
             [
-                'user_id' => 26,
+                'email_user' => 'bambang.wibowo@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Ir. Bambang Wibowo, M.Si',
                 'nip' => '197506151999031011',
                 'golongan_pangkat' => 'IV/a - Pembina',
@@ -179,7 +180,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Kalianget',
             ],
             [
-                'user_id' => 27,
+                'email_user' => 'dewi.kartika@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Dra. Dewi Kartika, M.P',
                 'nip' => '197908202000032012',
                 'golongan_pangkat' => 'III/d - Penata Tk I',
@@ -194,7 +195,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Bluto',
             ],
             [
-                'user_id' => 28,
+                'email_user' => 'agus.santoso@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Drs. Agus Santoso, S.Hut',
                 'nip' => '198104102001031013',
                 'golongan_pangkat' => 'III/c - Penata',
@@ -209,7 +210,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Dungkek',
             ],
             [
-                'user_id' => 29,
+                'email_user' => 'rina.marlina@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Ir. Rina Marlina, M.M',
                 'nip' => '198306252002032014',
                 'golongan_pangkat' => 'III/c - Penata',
@@ -224,7 +225,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Gapura',
             ],
             [
-                'user_id' => 30,
+                'email_user' => 'budi.santoso@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Dra. Budi Santoso, M.Si',
                 'nip' => '198509012001031015',
                 'golongan_pangkat' => 'III/b - Penata Muda Tk I',
@@ -239,7 +240,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Batuputih',
             ],
             [
-                'user_id' => 31,
+                'email_user' => 'eko.prasetyo@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Ir. Eko Prasetyo, M.P',
                 'nip' => '198712152002031016',
                 'golongan_pangkat' => 'III/b - Penata Muda Tk I',
@@ -254,7 +255,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Ganding',
             ],
             [
-                'user_id' => 32,
+                'email_user' => 'fitri.handayani@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Dra. Fitri Handayani, S.Hut',
                 'nip' => '198902202003032017',
                 'golongan_pangkat' => 'III/a - Penata Muda',
@@ -269,7 +270,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Banyuates',
             ],
             [
-                'user_id' => 33,
+                'email_user' => 'gatot.subroto@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Drs. Gatot Subroto, M.Si',
                 'nip' => '199105052003031018',
                 'golongan_pangkat' => 'III/a - Penata Muda',
@@ -284,7 +285,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Kota Sumenep',
             ],
             [
-                'user_id' => 34,
+                'email_user' => 'hesti.wahyuni@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Ir. Hesti Wahyuni, M.M',
                 'nip' => '199307152004031019',
                 'golongan_pangkat' => 'III/a - Penata Muda',
@@ -299,7 +300,7 @@ class PenyuluhNewSeeder extends Seeder
                 'wilayah_kerja' => 'Kecamatan Kalianget',
             ],
             [
-                'user_id' => 35,
+                'email_user' => 'indra.setiawan@disperhut.sumenepprov.go.id',
                 'nama_lengkap' => 'Dra. Indra Setiawan, M.Pd',
                 'nip' => '199501202004031020',
                 'golongan_pangkat' => 'III/a - Penata Muda',
@@ -316,7 +317,18 @@ class PenyuluhNewSeeder extends Seeder
         ];
 
         foreach ($penyuluhs as $data) {
-            Penyuluh::create($data);
+            // Cari user berdasarkan email
+            $user = User::where('email', $data['email_user'])->first();
+            
+            if ($user) {
+                // Hapus email_user dari data sebelum insert
+                unset($data['email_user']);
+                
+                // Tambahkan user_id dari user yang ditemukan
+                $data['user_id'] = $user->id;
+                
+                Penyuluh::create($data);
+            }
         }
     }
 }

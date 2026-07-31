@@ -3,78 +3,24 @@
 namespace Database\Seeders;
 
 use App\Models\LaporanKth;
+use App\Models\Kth;
 use Illuminate\Database\Seeder;
 
 class LaporanSeeder extends Seeder
 {
     public function run(): void
     {
-        // Data sepasang id_kth dan id_penyuluh
-        $kthPenyuluhPairs = [
-            ['id_kth' => 130, 'id_penyuluh' => 1],
-            ['id_kth' => 131, 'id_penyuluh' => 1],
-            ['id_kth' => 132, 'id_penyuluh' => 1],
-            ['id_kth' => 133, 'id_penyuluh' => 9],
-            ['id_kth' => 134, 'id_penyuluh' => 9],
-            ['id_kth' => 135, 'id_penyuluh' => 9],
-            ['id_kth' => 136, 'id_penyuluh' => 10],
-            ['id_kth' => 137, 'id_penyuluh' => 10],
-            ['id_kth' => 138, 'id_penyuluh' => 10],
-            ['id_kth' => 139, 'id_penyuluh' => 11],
-            ['id_kth' => 140, 'id_penyuluh' => 11],
-            ['id_kth' => 141, 'id_penyuluh' => 11],
-            ['id_kth' => 142, 'id_penyuluh' => 12],
-            ['id_kth' => 143, 'id_penyuluh' => 12],
-            ['id_kth' => 144, 'id_penyuluh' => 12],
-            ['id_kth' => 145, 'id_penyuluh' => 13],
-            ['id_kth' => 146, 'id_penyuluh' => 13],
-            ['id_kth' => 147, 'id_penyuluh' => 13],
-            ['id_kth' => 148, 'id_penyuluh' => 14],
-            ['id_kth' => 149, 'id_penyuluh' => 14],
-            ['id_kth' => 150, 'id_penyuluh' => 14],
-            ['id_kth' => 151, 'id_penyuluh' => 15],
-            ['id_kth' => 152, 'id_penyuluh' => 15],
-            ['id_kth' => 153, 'id_penyuluh' => 15],
-            ['id_kth' => 154, 'id_penyuluh' => 16],
-            ['id_kth' => 155, 'id_penyuluh' => 16],
-            ['id_kth' => 156, 'id_penyuluh' => 16],
-            ['id_kth' => 157, 'id_penyuluh' => 17],
-            ['id_kth' => 158, 'id_penyuluh' => 17],
-            ['id_kth' => 159, 'id_penyuluh' => 17],
-            ['id_kth' => 160, 'id_penyuluh' => 18],
-            ['id_kth' => 161, 'id_penyuluh' => 18],
-            ['id_kth' => 162, 'id_penyuluh' => 18],
-            ['id_kth' => 163, 'id_penyuluh' => 19],
-            ['id_kth' => 164, 'id_penyuluh' => 19],
-            ['id_kth' => 165, 'id_penyuluh' => 19],
-            ['id_kth' => 166, 'id_penyuluh' => 20],
-            ['id_kth' => 167, 'id_penyuluh' => 20],
-            ['id_kth' => 168, 'id_penyuluh' => 20],
-            ['id_kth' => 169, 'id_penyuluh' => 21],
-            ['id_kth' => 170, 'id_penyuluh' => 21],
-            ['id_kth' => 171, 'id_penyuluh' => 21],
-            ['id_kth' => 172, 'id_penyuluh' => 22],
-            ['id_kth' => 173, 'id_penyuluh' => 22],
-            ['id_kth' => 174, 'id_penyuluh' => 22],
-            ['id_kth' => 175, 'id_penyuluh' => 23],
-            ['id_kth' => 176, 'id_penyuluh' => 23],
-            ['id_kth' => 177, 'id_penyuluh' => 23],
-            ['id_kth' => 178, 'id_penyuluh' => 24],
-            ['id_kth' => 179, 'id_penyuluh' => 24],
-            ['id_kth' => 180, 'id_penyuluh' => 24],
-            ['id_kth' => 181, 'id_penyuluh' => 25],
-            ['id_kth' => 182, 'id_penyuluh' => 25],
-            ['id_kth' => 183, 'id_penyuluh' => 25],
-            ['id_kth' => 184, 'id_penyuluh' => 26],
-            ['id_kth' => 185, 'id_penyuluh' => 26],
-            ['id_kth' => 186, 'id_penyuluh' => 26],
-            ['id_kth' => 187, 'id_penyuluh' => 27],
-            ['id_kth' => 188, 'id_penyuluh' => 27],
-            ['id_kth' => 189, 'id_penyuluh' => 27],
-            ['id_kth' => 190, 'id_penyuluh' => 28],
-            ['id_kth' => 191, 'id_penyuluh' => 28],
-            ['id_kth' => 192, 'id_penyuluh' => 28],
-        ];
+        // Ambil semua KTH dari database
+        $allKth = Kth::all();
+
+        // Buat pairs dari KTH yang ada
+        $kthPenyuluhPairs = [];
+        foreach ($allKth as $kth) {
+            $kthPenyuluhPairs[] = [
+                'id_kth' => $kth->id,
+                'id_penyuluh' => $kth->id_penyuluh,
+            ];
+        }
 
         $laporans = [];
 
@@ -145,7 +91,6 @@ class LaporanSeeder extends Seeder
 
         foreach ($kthPenyuluhPairs as $index => $pair) {
             // Setiap KTH punya jumlah laporan per bulan yang bervariasi
-            // 1-3 laporan per bulan (tidak ada yang 0)
             $monthlyCount = [
                 0 => rand(1, 3),  // Jan
                 1 => rand(1, 3),  // Feb
