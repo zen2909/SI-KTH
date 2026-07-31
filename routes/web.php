@@ -17,10 +17,29 @@ use App\Http\Controllers\Penyuluh\LaporanController as LaporanPenyuluh;
 use App\Http\Controllers\Penyuluh\ProfileController as ProfilePenyuluh;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/login', function () {
     return redirect('/penyuluh');
 })->name('login');
+
+Route::get('/debug-db', function () {
+    try {
+        DB::connection()->getPdo();
+
+        return response()->json([
+            'status' => 'success',
+            'driver' => DB::connection()->getDriverName(),
+            'database' => DB::connection()->getDatabaseName(),
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'class' => get_class($e),
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+});
 
 Route::get('/', function () {
     if (auth()->check()) {
