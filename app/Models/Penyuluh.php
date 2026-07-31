@@ -27,6 +27,10 @@ class Penyuluh extends Model
         'wilayah_kerja',
     ];
 
+    protected $casts = [
+        'tanggal_lahir' => 'date',
+    ];
+
     // Relasi inverse ke User
     public function user()
     {

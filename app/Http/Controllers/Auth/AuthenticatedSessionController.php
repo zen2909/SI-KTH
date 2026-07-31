@@ -11,37 +11,59 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
     public function create(): View
     {
-        return view('auth.login');
+        return view('auth.login-penyuluh');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = Auth::user();
+        $requestedRole = $request->input('role');
+
+        if ($user->role !== $requestedRole) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return back()->withErrors([
+                'email' => 'Anda tidak memiliki akses ke halaman ini.',
+            ]);
+        }
+
+        switch ($user->role) {
+            case 'admin':
+                return redirect()->intended(route('admin.dashboard'));
+            case 'pimpinan':
+                return redirect()->intended(route('pimpinan.dashboard'));
+            case 'penyuluh':
+                return redirect()->intended(route('penyuluh.dashboard'));
+            default:
+                return redirect('/');
+        }
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
     public function destroy(Request $request): RedirectResponse
     {
+        $role = Auth::user()->role;
+
         Auth::guard('web')->logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        switch ($role) {
+            case 'admin':
+                return redirect()->route('login.admin');
+            case 'pimpinan':
+                return redirect()->route('login.pimpinan');
+            case 'penyuluh':
+                return redirect()->route('login.penyuluh');
+            default:
+                return redirect('/');
+        }
     }
 }

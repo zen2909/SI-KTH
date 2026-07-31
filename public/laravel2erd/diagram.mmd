@@ -1,0 +1,101 @@
+erDiagram
+    %% Laravel ERD Diagram
+
+    User {
+        bigint id PK
+        string name
+        string email
+        string password
+        string plain_password
+        string role
+        string foto_profil
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    Penyuluh {
+        bigint id PK
+        string user_id FK
+        string nama_lengkap
+        string nip
+        string golongan_pangkat
+        string nik
+        string tempat_lahir
+        date tanggal_lahir
+        string jenis_kelamin
+        string alamat
+        string no_telepon
+        string email_pribadi
+        string jabatan
+        string wilayah_kerja
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    LaporanKth {
+        bigint id PK
+        string id_kth FK
+        string id_penyuluh FK
+        date periode_laporan
+        string jenis_usaha
+        string nib
+        string pirt
+        string sertifikat_halal_file
+        string merek_dagang
+        string potensi_produksi
+        string satuan_produksi
+        string nte_per_bulan
+        string jangkauan_pemasaran
+        string kendala_usaha
+        string kebutuhan_pengembangan
+        string keterangan_tambahan
+        string status_verifikasi
+        string catatan_revisi
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    Kth {
+        bigint id PK
+        string id_penyuluh FK
+        string nama_kth
+        string kelas_kth
+        string desa
+        string kecamatan
+        string kabupaten
+        string latitude
+        string longitude
+        string nama_ketua
+        string no_hp_ketua
+        string nomor_register
+        date tanggal_register
+        string status_kth
+        integer tahun_tidak_aktif
+        string status_verifikasi
+        string catatan_revisi
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    DokumentasiLaporan {
+        bigint id PK
+        string id_laporan_kth FK
+        string file_path
+        string keterangan
+        string uploaded_by FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    User ||--|| Penyuluh : "has one"
+    User ||--o{ DokumentasiLaporan : "has many"
+    Penyuluh ||--o{ Kth : "has many"
+    Penyuluh ||--o{ LaporanKth : "has many"
+    Penyuluh }o--|| User : "belongs to"
+    LaporanKth ||--o{ DokumentasiLaporan : "has many"
+    LaporanKth }o--|| Kth : "belongs to"
+    LaporanKth }o--|| Penyuluh : "belongs to"
+    Kth ||--o{ LaporanKth : "has many"
+    Kth }o--|| Penyuluh : "belongs to"
+    DokumentasiLaporan }o--|| LaporanKth : "belongs to"
+    DokumentasiLaporan }o--|| User : "belongs to"
