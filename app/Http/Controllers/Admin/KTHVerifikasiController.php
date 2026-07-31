@@ -10,7 +10,7 @@ class KTHVerifikasiController extends Controller
 {
     public function index(Request $request)
     {
-        // 🔥 HANYA TAMPILKAN KTH DENGAN STATUS PENDING
+        // HANYA TAMPILKAN KTH DENGAN STATUS PENDING
         $query = Kth::with('penyuluh')->where('status_verifikasi', 'pending');
 
         // Filter pencarian
@@ -49,7 +49,7 @@ class KTHVerifikasiController extends Controller
     {
         $kth = Kth::findOrFail($id);
 
-        // 🔥 CEK APAKAH STATUSNYA PENDING
+        // CEK APAKAH STATUSNYA PENDING
         if ($kth->status_verifikasi !== 'pending') {
             return redirect()->back()->with('error', 'Data KTH ini sudah diverifikasi atau ditolak.');
         }
@@ -64,15 +64,15 @@ class KTHVerifikasiController extends Controller
 
 public function reject(Request $request, $id)
 {
-    // 🔥 VALIDASI
+    // VALIDASI
     $request->validate([
         'catatan_revisi' => 'required|string|min:10',
     ]);
 
-    // 🔥 AMBIL ID DARI HIDDEN INPUT
+    // AMBIL ID DARI HIDDEN INPUT
     $kthId = $request->kth_id ?? $id;
     
-    // 🔥 CARI KTH
+    // CARI KTH
     $kth = Kth::find($kthId);
     
     if (!$kth) {
@@ -83,12 +83,12 @@ public function reject(Request $request, $id)
         return redirect()->back()->with('error', 'Data KTH ini sudah diverifikasi atau ditolak.');
     }
 
-    // 🔥 UPDATE DATA
+    // UPDATE DATA
     $kth->status_verifikasi = 'rejected';
     $kth->catatan_revisi = $request->catatan_revisi;
     $kth->save();
 
-    // 🔥 DEBUG - Cek hasil update
+    // DEBUG - Cek hasil update
     \Log::info('KTH Rejected:', [
         'id' => $kth->id,
         'status' => $kth->status_verifikasi,

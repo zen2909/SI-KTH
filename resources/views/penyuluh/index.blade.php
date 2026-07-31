@@ -214,7 +214,6 @@
                 </div>
             </div>
 
-            {{-- Grafik Status Laporan (kanan) --}}
             <div class="bg-white rounded-2xl shadow p-4 border border-[#e1e3e433]">
                 <div class="flex items-center justify-between">
                     <h2 class="text-lg font-semibold text-zinc-900">Grafik Laporan per Bulan</h2>
@@ -223,37 +222,83 @@
                 </div>
                 <div class="mt-4">
                     <div class="relative h-64">
-                        <div class="absolute inset-0 flex items-end justify-around">
-                            @foreach ($chartData['labels'] as $index => $label)
-                                @php
-                                    $value = $chartData['data'][$index] ?? 0;
-                                    $maxValue = $chartData['maxValue'] > 0 ? $chartData['maxValue'] : 1;
-                                    $height = max(5, ($value / $maxValue) * 100);
-                                @endphp
-                                <div class="flex flex-col items-center" style="width: 8.33%;">
-                                    <div class="w-6 bg-primary rounded-t"
-                                        style="height: {{ $height }}%; min-height: {{ $value > 0 ? '4px' : '0' }};">
+                        @php
+                            $labels = $chartData['labels'] ?? [
+                                'Jan',
+                                'Feb',
+                                'Mar',
+                                'Apr',
+                                'Mei',
+                                'Jun',
+                                'Jul',
+                                'Agu',
+                                'Sep',
+                                'Okt',
+                                'Nov',
+                                'Des',
+                            ];
+                            $data = $chartData['data'] ?? array_fill(0, 12, 0);
+                            $maxValue = $chartData['maxValue'] ?? 1;
+                            $maxValue = is_numeric($maxValue) ? $maxValue : 1;
+                            $maxHeight = 85;
+
+                            // Label Y dengan interval yang lebih halus
+                            $yLabels = [
+                                $maxValue,
+                                round($maxValue * 0.75),
+                                round($maxValue * 0.5),
+                                round($maxValue * 0.25),
+                                0,
+                            ];
+                        @endphp
+
+                        <div class="absolute inset-0 flex" style="padding-bottom: 20px; padding-left: 35px;">
+                            {{-- Label Y di kiri --}}
+                            <div class="flex flex-col justify-between text-[10px] text-[#404943] pr-2"
+                                style="height: 100%;">
+                                @foreach ($yLabels as $label)
+                                    <span>{{ $label }}</span>
+                                @endforeach
+                            </div>
+
+                            {{-- Area Chart --}}
+                            <div class="flex-1 flex items-end justify-around relative">
+                                @foreach ($labels as $index => $label)
+                                    @php
+                                        $value = $data[$index] ?? 0;
+                                        $height = $maxValue > 0 ? ($value / $maxValue) * $maxHeight : 0;
+                                        $height = max(2, $height);
+                                    @endphp
+                                    <div class="flex flex-col items-center"
+                                        style="width: 8.33%; height: 100%; justify-content: flex-end;">
+                                        @if ($value > 0)
+                                            <span
+                                                class="text-[10px] text-primary font-bold text-center mb-1">{{ $value }}</span>
+                                        @endif
+                                        <div class="w-6 bg-primary rounded-t transition-all duration-500"
+                                            style="height: {{ $height }}%; min-height: {{ $value > 0 ? '4px' : '0' }};">
+                                        </div>
+                                        <span class="text-[10px] text-[#404943] mt-1">{{ $label }}</span>
                                     </div>
-                                    <span class="text-[10px] text-[#404943] mt-1">{{ $label }}</span>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
-                        {{-- Garis bantu --}}
-                        <div class="absolute inset-x-0 top-0 border-t border-[#e1e3e41a]"></div>
-                        <div class="absolute inset-x-0 top-1/3 border-t border-[#e1e3e41a]"></div>
-                        <div class="absolute inset-x-0 top-2/3 border-t border-[#e1e3e41a]"></div>
-                        <div class="absolute left-0 top-0 flex flex-col justify-between h-full text-[10px] text-[#404943]">
-                            <span>{{ $chartData['maxValue'] }}</span>
-                            <span>{{ round($chartData['maxValue'] * 0.66) }}</span>
-                            <span>{{ round($chartData['maxValue'] * 0.33) }}</span>
-                            <span>0</span>
+
+                        {{-- Garis bantu horizontal --}}
+                        <div class="absolute left-0 right-0 bottom-0 border-t border-gray-200" style="left: 35px;"></div>
+                        <div class="absolute left-0 right-0 bottom-1/4 border-t border-gray-100" style="left: 35px;">
+                        </div>
+                        <div class="absolute left-0 right-0 bottom-1/2 border-t border-gray-100" style="left: 35px;">
+                        </div>
+                        <div class="absolute left-0 right-0 bottom-3/4 border-t border-gray-100" style="left: 35px;">
                         </div>
                     </div>
-                    {{-- Legend --}}
+
                     <div class="flex items-center gap-4 mt-2 text-xs text-[#404943]">
-                        <span class="flex items-center"><span
-                                class="inline-block w-3 h-3 bg-primary rounded-sm mr-1"></span> Jumlah Laporan
-                            Terverifikasi</span>
+                        <span class="flex items-center">
+                            <span class="inline-block w-3 h-3 bg-primary rounded-sm mr-1"></span>
+                            Jumlah Laporan
+                        </span>
                     </div>
                 </div>
             </div>

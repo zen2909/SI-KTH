@@ -247,7 +247,6 @@
                 </div>
             </div>
 
-            {{-- Grafik Laporan per Bulan (kanan) --}}
             <div class="bg-white rounded-2xl shadow p-4 border border-[#e1e3e433]">
                 <div class="flex items-center justify-between">
                     <h2 class="text-lg font-semibold text-zinc-900">Grafik Laporan per Bulan</h2>
@@ -272,40 +271,57 @@
                                 'Des',
                             ];
                             $maxValue = max($chartData) > 0 ? max($chartData) : 1;
+                            $maxHeight = 90;
+                            // Label Y dengan interval
+                            $yLabels = [
+                                $maxValue,
+                                round($maxValue * 0.75),
+                                round($maxValue * 0.5),
+                                round($maxValue * 0.25),
+                                0,
+                            ];
                         @endphp
-                        <div class="absolute inset-0 flex items-end justify-around">
-                            @foreach ($chartLabels as $index => $label)
-                                @php
-                                    $value = $chartData[$index + 1] ?? 0;
-                                    $height = max(5, ($value / $maxValue) * 100);
-                                @endphp
-                                <div class="flex flex-col items-center" style="width: 8.33%;">
-                                    <div class="w-6 bg-primary rounded-t"
-                                        style="height: {{ $height }}%; min-height: {{ $value > 0 ? '4px' : '0' }};">
+
+                        {{-- Container untuk chart + label Y --}}
+                        <div class="absolute inset-0 flex" style="padding-bottom: 20px;">
+                            {{-- Label Y di kiri --}}
+                            <div class="flex flex-col justify-between text-[10px] text-[#404943] pr-2"
+                                style="height: 100%; padding-bottom: 0;">
+                                @foreach ($yLabels as $label)
+                                    <span>{{ $label }}</span>
+                                @endforeach
+                            </div>
+
+                            {{-- Area Chart --}}
+                            <div class="flex-1 flex items-end justify-around relative">
+                                @foreach ($chartLabels as $index => $label)
+                                    @php
+                                        $value = $chartData[$index + 1] ?? 0;
+                                        $height = $maxValue > 0 ? ($value / $maxValue) * $maxHeight : 0;
+                                        $height = max(2, $height);
+                                    @endphp
+                                    <div class="flex flex-col items-center"
+                                        style="width: 8.33%; height: 100%; justify-content: flex-end;">
                                         @if ($value > 0)
                                             <span
-                                                class="text-[8px] text-primary font-bold block text-center -mt-4">{{ $value }}</span>
+                                                class="text-[10px] text-primary font-bold text-center mb-1">{{ $value }}</span>
                                         @endif
+                                        <div class="w-6 bg-primary rounded-t transition-all duration-500"
+                                            style="height: {{ $height }}%; min-height: {{ $value > 0 ? '4px' : '0' }};">
+                                        </div>
+                                        <span class="text-[10px] text-[#404943] mt-1">{{ $label }}</span>
                                     </div>
-                                    <span class="text-[10px] text-[#404943] mt-1">{{ $label }}</span>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
-                        {{-- Garis bantu --}}
-                        <div class="absolute inset-x-0 top-0 border-t border-[#e1e3e41a]"></div>
-                        <div class="absolute inset-x-0 top-1/3 border-t border-[#e1e3e41a]"></div>
-                        <div class="absolute inset-x-0 top-2/3 border-t border-[#e1e3e41a]"></div>
-                        <div class="absolute left-0 top-0 flex flex-col justify-between h-full text-[10px] text-[#404943]">
-                            <span>{{ $maxValue }}</span>
-                            <span>{{ round($maxValue * 0.66) }}</span>
-                            <span>{{ round($maxValue * 0.33) }}</span>
-                            <span>0</span>
-                        </div>
+
                     </div>
-                    {{-- Legend --}}
+
                     <div class="flex items-center gap-4 mt-2 text-xs text-[#404943]">
-                        <span class="flex items-center"><span
-                                class="inline-block w-3 h-3 bg-primary rounded-sm mr-1"></span> Jumlah Laporan</span>
+                        <span class="flex items-center">
+                            <span class="inline-block w-3 h-3 bg-primary rounded-sm mr-1"></span>
+                            Jumlah Laporan
+                        </span>
                     </div>
                 </div>
             </div>

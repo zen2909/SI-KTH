@@ -361,7 +361,7 @@
                                             <button type="button" onclick="openCatatanRevisiModal({{ $kth->id }})"
                                                 class="text-neutral hover:outline-2 hover:outline-yellow-500 hover:bg-neutral bg-yellow-500 rounded-lg p-2 transition-all duration-200 hover:text-yellow-500 pt-1.5"
                                                 title="Lihat Catatan Revisi">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5""
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
                                                     viewBox="0 0 24 24">
                                                     <path d="M0 0h24v24H0z" fill="none" />
                                                     <path fill="currentColor"
@@ -404,68 +404,7 @@
                 </table>
             </div>
 
-            {{-- Pagination --}}
-            @if ($kths->hasPages())
-                <div
-                    class="px-6 py-4 bg-[#f3f4f5] border-t border-[#c0c9c133] flex flex-wrap items-center justify-between gap-3">
-                    <p class="text-xs font-medium text-[#404943]">
-                        Menampilkan {{ $kths->firstItem() ?? 0 }}-{{ $kths->lastItem() ?? 0 }} dari {{ $kths->total() }}
-                        KTH
-                    </p>
-                    <div class="flex items-center gap-2">
-                        {{-- Previous --}}
-                        @if ($kths->onFirstPage())
-                            <button
-                                class="h-8 w-8 flex items-center justify-center rounded-lg border border-[#c0c9c133] text-[#404943] opacity-50 cursor-not-allowed"
-                                disabled>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </button>
-                        @else
-                            <a href="{{ $kths->previousPageUrl() }}"
-                                class="h-8 w-8 flex items-center justify-center rounded-lg border border-[#c0c9c133] text-[#404943] hover:bg-gray-200">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </a>
-                        @endif
 
-                        {{-- Page Numbers --}}
-                        @foreach ($kths->getUrlRange(1, $kths->lastPage()) as $page => $url)
-                            @if ($page == $kths->currentPage())
-                                <span
-                                    class="h-8 w-8 flex items-center justify-center rounded-lg bg-[#0e4c34] text-white">{{ $page }}</span>
-                            @else
-                                <a href="{{ $url }}"
-                                    class="h-8 w-8 flex items-center justify-center rounded-lg border border-[#c0c9c133] text-[#404943] hover:bg-gray-200">{{ $page }}</a>
-                            @endif
-                        @endforeach
-
-                        {{-- Next --}}
-                        @if ($kths->hasMorePages())
-                            <a href="{{ $kths->nextPageUrl() }}"
-                                class="h-8 w-8 flex items-center justify-center rounded-lg border border-[#c0c9c133] text-[#404943] hover:bg-gray-200">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
-                        @else
-                            <button
-                                class="h-8 w-8 flex items-center justify-center rounded-lg border border-[#c0c9c133] text-[#404943] opacity-50 cursor-not-allowed"
-                                disabled>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </button>
-                        @endif
-                    </div>
-                </div>
-            @endif
             <!-- Pagination -->
             <div
                 class="px-6 py-4 bg-zinc-100 border-t border-stone-300 flex flex-col sm:flex-row justify-between items-center gap-4">

@@ -5,19 +5,11 @@
 
     <div class="bg-white rounded-3xl flex flex-col max-h-[90vh]">
         {{-- Header --}}
-        <div class="bg-white border-b border-stone-300 sticky top-0 z-20 flex-shrink-0">
-            <div class="flex items-center py-4 px-6">
+        <div class="bg-white sticky top-0 z-20 flex-shrink-0">
+            <div class="flex items-center py-2.5 px-6">
                 <div class="flex flex-col">
-                    <div class="flex items-center gap-2">
-                        <span class="text-neutral-700 text-sm font-normal">Laporan KTH</span>
-                        <svg class="w-4 h-5 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                            </path>
-                        </svg>
-                        <span class="text-emerald-900 text-sm font-normal"
-                            id="modalFormTitle">{{ $mode == 'edit' ? 'Edit' : 'Tambah' }} Laporan Baru</span>
-                    </div>
-                    <span class="text-zinc-900 text-base font-medium font-poppins" id="modalTitle">Formulir Pelaporan
+                    <span class="text-2xl font-semibold text-zinc-900 font-poppins leading-none" id="modalTitle">Formulir
+                        Pelaporan
                         KTH</span>
                 </div>
                 <button type="button" onclick="closeLaporanModal()"
@@ -28,7 +20,8 @@
                     </svg>
                 </button>
             </div>
-            <p class="text-neutral-700 text-sm font-normal px-6 pb-4">Silakan lengkapi data laporan Kelompok Tani Hutan
+            <p class="text-neutral-700 text-sm font-normal px-6 pb-2 -mt-0.5">Silakan lengkapi data laporan Kelompok
+                Tani Hutan
                 secara berkala untuk pemantauan perkembangan usaha.</p>
         </div>
 

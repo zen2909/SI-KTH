@@ -37,7 +37,8 @@
                     </path>
                 </svg>
                 <span class="text-neutral-700 text-sm font-normal">Identitas KTH:</span>
-                <span class="text-emerald-900 text-sm font-bold">{{ $kth->nama_kth ?? 'Data KTH' }}</span>
+                <span class="text-emerald-900 text-sm font-bold"
+                    id="catatanRevisiNamaKTH">{{ $kth->nama_kth ?? 'Data KTH' }}</span>
             </div>
         </div>
 
@@ -56,7 +57,7 @@
                 </div>
 
                 {{-- Isi Catatan Revisi --}}
-                <div class="text-neutral-700 text-sm font-normal leading-relaxed space-y-3">
+                <div class="text-neutral-700 text-sm font-normal leading-relaxed space-y-3" id="catatanRevisiIsi">
                     @if ($kth && $kth->catatan_revisi)
                         {!! nl2br(e($kth->catatan_revisi)) !!}
                     @else
@@ -81,8 +82,9 @@
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
                         </path>
                     </svg>
-                    <span class="text-neutral-700 text-sm font-normal">
-                        Terakhir diperbarui oleh Admin
+
+                    {{-- Updated At --}}
+                    <span class="text-neutral-700 text-sm font-normal" id="catatanRevisiUpdatedAt">
                         @if ($kth && $kth->updated_at)
                             pada {{ \Carbon\Carbon::parse($kth->updated_at)->format('d M Y, H:i') }} WIB
                         @else
@@ -109,14 +111,61 @@
 
 <script>
     // ============================================
-    // FUNGSI BUKA MODAL CATATAN REVISI
+    // FUNGSI BUKA MODAL CATATAN REVISI DENGAN FETCH
     // ============================================
     window.openCatatanRevisiModal = function(kthId) {
         const modal = document.getElementById('modalCatatanRevisi');
-        if (modal) {
-            modal.showModal();
-            document.body.classList.add('no-scroll');
+        if (!modal) {
+            console.error('Modal not found');
+            return;
         }
+
+        // Tampilkan loading
+        modal.showModal();
+        document.body.classList.add('no-scroll');
+
+        // Ambil data KTH via fetch
+        fetch('/penyuluh/kth/' + kthId)
+            .then(response => response.json())
+            .then(data => {
+                // Update nama KTH
+                const namaKth = document.getElementById('catatanRevisiNamaKTH');
+                if (namaKth) {
+                    namaKth.textContent = data.nama_kth || 'Data KTH';
+                }
+
+                // Update catatan revisi
+                const catatan = document.getElementById('catatanRevisiIsi');
+                if (catatan) {
+                    if (data.catatan_revisi) {
+                        catatan.innerHTML = data.catatan_revisi.replace(/\n/g, '<br>');
+                    } else {
+                        catatan.innerHTML =
+                            '<p class="text-gray-500 italic">Tidak ada catatan revisi dari Admin.</p>';
+                    }
+                }
+
+                // Update tanggal update
+                const updatedAt = document.getElementById('catatanRevisiUpdatedAt');
+                if (updatedAt && data.updated_at) {
+                    const date = new Date(data.updated_at);
+                    updatedAt.textContent = date.toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }) + ' WIB';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching KTH data:', error);
+                // Fallback: tetap tampilkan modal dengan data yang ada (dari props)
+                const namaKth = document.getElementById('catatanRevisiNamaKTH');
+                if (namaKth) {
+                    namaKth.textContent = 'Data KTH';
+                }
+            });
     };
 
     // ============================================

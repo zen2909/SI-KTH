@@ -33,7 +33,7 @@
                 <p class="text-gray-600">Pantau kinerja dan lihat laporan strategis KTH</p>
             </div>
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-4">
+            <form method="POST" action="{{ route('login') }}" class="space-y-4" novalidate>
                 @csrf
                 <input type="hidden" name="role" value="pimpinan">
 

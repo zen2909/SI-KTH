@@ -8,21 +8,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Spatie\Permission\Models\Role;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
     public function create(): View
     {
         return view('auth.login-penyuluh');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
@@ -30,11 +23,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
+        $requestedRole = $request->input('role');
 
-        // Cek role dari user yang login
-        $requestedRole = $request->input('role'); // Ambil role dari form
-
-        // Jika role tidak sesuai, logout dan beri error
         if ($user->role !== $requestedRole) {
             Auth::logout();
             $request->session()->invalidate();
@@ -45,7 +35,6 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        // Redirect berdasarkan role
         switch ($user->role) {
             case 'admin':
                 return redirect()->intended(route('admin.dashboard'));
@@ -58,21 +47,14 @@ class AuthenticatedSessionController extends Controller
         }
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
     public function destroy(Request $request): RedirectResponse
     {
-        // Simpan role sebelum logout
         $role = Auth::user()->role;
 
         Auth::guard('web')->logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        // Redirect berdasarkan role yang logout
         switch ($role) {
             case 'admin':
                 return redirect()->route('login.admin');

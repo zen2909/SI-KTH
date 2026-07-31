@@ -18,6 +18,10 @@ use App\Http\Controllers\Penyuluh\ProfileController as ProfilePenyuluh;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/login', function () {
+    return redirect('/penyuluh');
+})->name('login');
+
 Route::get('/', function () {
     if (auth()->check()) {
         $role = auth()->user()->role;

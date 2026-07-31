@@ -217,8 +217,7 @@
             '{{ addslashes($user->penyuluh->jabatan ?? '') }}',
             '{{ addslashes($user->penyuluh->golongan_pangkat ?? '') }}',
             '{{ addslashes($user->penyuluh->wilayah_kerja ?? '') }}',
-            '{{ $user->plain_password ? Crypt::decryptString($user->plain_password) : 'password123' }}'
-        )"
+            '{{ $user->plain_password ?? 'password123' }}',)"
                                                 class="text-neutral hover:outline-2 hover:outline-yellow-500 hover:text-yellow-500 hover:bg-neutral bg-yellow-500 rounded-lg p-2 transition-all duration-200"
                                                 title="Detail Penyuluh">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"

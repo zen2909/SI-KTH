@@ -172,6 +172,7 @@
     @include('components.modal.penyuluh.modal-preview-upload')
     @include('components.modal.penyuluh.modal-warning-laporan')
     @include('components.modal.penyuluh.modal-hapus-laporan')
+    @include('components.modal.penyuluh.modal-revisi-kth', ['kth' => $kth ?? null])
     @include('components.modal.penyuluh.modal-revisi-laporan')
 
     @include('components.modal.penyuluh.modal-detail-laporan', ['laporan' => $laporan ?? null])

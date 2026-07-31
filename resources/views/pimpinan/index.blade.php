@@ -490,68 +490,68 @@
             </div>
 
             {{-- KTH Paling Aktif Melaporkan --}}
-            <div class="bg-white rounded-3xl shadow border border-stone-300/20 p-6 flex flex-col">
+            <div class="bg-white rounded-3xl shadow border border-stone-300/20 p-6 flex flex-col h-full">
                 <div>
                     <h2 class="text-center text-zinc-900 text-xl font-bold font-poppins">KTH Paling Aktif</h2>
                     <p class="text-center text-neutral-700 text-sm font-normal font-inter">KTH dengan laporan terbanyak</p>
-
-                    <div class="mt-4 space-y-3">
-                        @php
-                            // Buat array 5 peringkat
-                            $rankings = [];
-                            for ($i = 0; $i < 5; $i++) {
-                                $rankings[$i] = $kthPalingAktif[$i] ?? null;
-                            }
-                        @endphp
-
-                        @foreach ($rankings as $index => $item)
-                            <div
-                                class="flex items-center gap-3 p-2 bg-gray-50 rounded-xl border border-stone-200 hover:bg-gray-100 transition">
-                                {{-- Peringkat --}}
-                                <div
-                                    class="w-7 h-7 rounded-full flex items-center justify-center text-center text-xs font-bold flex-shrink-0
-                        {{ $index == 0 ? 'bg-yellow-400 text-yellow-900' : '' }}
-                        {{ $index == 1 ? 'bg-gray-300 text-gray-700' : '' }}
-                        {{ $index == 2 ? 'bg-amber-600 text-white' : '' }}
-                        {{ $index >= 3 ? 'bg-emerald-100 text-emerald-700' : '' }}">
-                                    {{ $index + 1 }}
-                                </div>
-
-                                {{-- Nama KTH atau "-" --}}
-                                <div class="flex-1 min-w-0">
-                                    @if ($item)
-                                        <p class="text-zinc-900 text-sm font-semibold font-inter truncate">
-                                            {{ $item->nama_kth }}</p>
-                                    @else
-                                        <p class="text-neutral-400 text-sm font-medium font-inter">-</p>
-                                    @endif
-                                </div>
-
-                                {{-- Jumlah Laporan atau "-" --}}
-                                <div class="flex items-center gap-1">
-                                    @if ($item)
-                                        <span
-                                            class="text-emerald-900 text-sm font-bold font-inter">{{ $item->jumlah_laporan }}</span>
-                                        <span class="text-neutral-400 text-[10px] font-medium">laporan</span>
-                                    @else
-                                        <span class="text-neutral-400 text-sm font-medium">-</span>
-                                    @endif
-                                </div>
-                            </div>
-                        @endforeach
-
-                        @if ($kthPalingAktif->isEmpty())
-                            <div class="text-center text-neutral-500 py-2">
-                                <p class="text-sm font-medium">Belum ada laporan</p>
-                            </div>
-                        @endif
-                    </div>
                 </div>
 
-                {{-- Tombol selalu di bawah --}}
-                <div class="mt-4 pt-4 border-t border-stone-300 mt-auto">
+                <div class="mt-4 space-y-3 flex-1">
+                    @php
+                        $rankings = [];
+                        for ($i = 0; $i < 5; $i++) {
+                            $rankings[$i] = $kthPalingAktif[$i] ?? null;
+                        }
+                    @endphp
+
+                    @foreach ($rankings as $index => $item)
+                        <div
+                            class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-stone-200 hover:bg-gray-100 transition">
+                            {{-- Peringkat --}}
+                            <div
+                                class="w-8 h-8 rounded-full flex items-center justify-center text-center text-sm font-bold flex-shrink-0
+                    {{ $index == 0 ? 'bg-yellow-400 text-yellow-900' : '' }}
+                    {{ $index == 1 ? 'bg-gray-300 text-gray-700' : '' }}
+                    {{ $index == 2 ? 'bg-amber-600 text-white' : '' }}
+                    {{ $index >= 3 ? 'bg-emerald-100 text-emerald-700' : '' }}">
+                                {{ $index + 1 }}
+                            </div>
+
+                            {{-- Nama KTH --}}
+                            <div class="flex-1 min-w-0">
+                                @if ($item)
+                                    <p class="text-zinc-900 text-base font-semibold font-inter truncate">
+                                        {{ $item->nama_kth }}
+                                    </p>
+                                @else
+                                    <p class="text-neutral-400 text-base font-medium font-inter">-</p>
+                                @endif
+                            </div>
+
+                            {{-- Jumlah Laporan --}}
+                            <div class="flex items-center gap-1 flex-shrink-0">
+                                @if ($item)
+                                    <span
+                                        class="text-emerald-900 text-base font-bold font-inter">{{ $item->jumlah_laporan }}</span>
+                                    <span class="text-neutral-400 text-xs font-medium">laporan</span>
+                                @else
+                                    <span class="text-neutral-400 text-base font-medium">-</span>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+
+                    @if ($kthPalingAktif->isEmpty())
+                        <div class="text-center text-neutral-500 py-2">
+                            <p class="text-sm font-medium">Belum ada laporan</p>
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Tombol --}}
+                <div class="pt-3 border-t border-stone-300 mt-auto">
                     <a href="{{ route('pimpinan.laporan.index') }}"
-                        class="w-full py-2.5 rounded-xl border-2 border-emerald-900 text-emerald-900 font-bold font-inter hover:bg-emerald-900 hover:text-white transition block text-center text-sm">
+                        class="w-full py-3 rounded-xl border-2 border-emerald-900 text-emerald-900 font-bold font-inter hover:bg-emerald-900 hover:text-white transition block text-center text-sm">
                         Lihat Semua Laporan
                     </a>
                 </div>
@@ -597,12 +597,6 @@
                     </div>
                 @endforelse
             </div>
-        </div>
-
-        {{-- Footer --}}
-        <div
-            class="text-center text-neutral-700 text-xs font-medium font-inter uppercase tracking-wider py-4 border-t border-stone-300">
-            © {{ date('Y') }} SI-KTH ForManage Administrative System. All Rights Reserved.
         </div>
     </div>
 
@@ -946,11 +940,11 @@
                             style="height: ${height}%; min-height: ${value > 0 ? '6px' : '4px'}; 
                             background: ${isZero ? '#f3f4f6' : 'linear-gradient(180deg, #0E4C34 0%, #1a7a4a 100%)'};">
                             ${value > 0 ? `
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-zinc-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-10 shadow-lg">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <span class="font-bold">${month} ${year}</span><br>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Rp ${Number(value * (satuan === 'Jt' ? 1000000 : (satuan === 'K' ? 1000 : 1))).toLocaleString('id-ID')}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ` : ''}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-zinc-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-10 shadow-lg">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <span class="font-bold">${month} ${year}</span><br>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Rp ${Number(value * (satuan === 'Jt' ? 1000000 : (satuan === 'K' ? 1000 : 1))).toLocaleString('id-ID')}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ` : ''}
                         </div>
                         <span class="text-neutral-500 text-[10px] font-medium mt-1.5">${month}</span>
                     </div>

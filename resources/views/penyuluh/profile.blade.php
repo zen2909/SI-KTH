@@ -21,8 +21,6 @@
                 </div>
                 {{-- Tombol ubah foto --}}
 
-
-
             </div>
 
             {{-- Informasi utama --}}
@@ -77,17 +75,6 @@
                         <div>
                             <p class="text-sm font-semibold text-[#404943]">Email Akun</p>
                             <p class="text-base font-semibold text-[#191c1d]">{{ $user->email }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-[#404943]">Status Akun</p>
-                            @if ($user->email_verified_at)
-                                <span
-                                    class="inline-block px-3 py-1 bg-green-100 rounded-full text-xs font-medium text-green-800">Terverifikasi</span>
-                            @else
-                                <span
-                                    class="inline-block px-3 py-1 bg-red-100 rounded-full text-xs font-medium text-red-800">Tidak
-                                    Terverifikasi</span>
-                            @endif
                         </div>
                     </div>
                 </div>

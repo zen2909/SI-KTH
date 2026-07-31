@@ -15,7 +15,7 @@ class LaporanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = LaporanKth::with(['kth', 'penyuluh']);
+        $query = LaporanKth::with(['kth', 'penyuluh'])->where('id_penyuluh', $request->user()->penyuluh->id);
 
         // Filter pencarian
         if ($request->filled('search')) {
@@ -56,13 +56,18 @@ class LaporanController extends Controller
                 return (int) $item;
             });
 
+            $kthOptions = Kth::where('id_penyuluh', $request->user()->penyuluh->id)
+        ->whereIn('status_verifikasi', ['pending', 'verified']) // Hanya yang pending/verified
+        ->orderBy('nama_kth')
+        ->get();
         return view('penyuluh.laporan', compact(
             'laporans',
             'totalLaporan',
             'totalVerified',
             'totalPending',
             'totalRejected',
-            'tahunList'
+            'tahunList',
+            'kthOptions'
         ));
     }
 
@@ -193,19 +198,39 @@ public function update(UpdateLaporanRequest $request, LaporanKth $laporan)
 public function editData($id)
 {
     try {
+        // 🔥 DEBUG: Cek user login
+        \Log::info('=== EDIT DATA LAPORAN ===');
+        \Log::info('User ID: ' . auth()->id());
+        \Log::info('User Role: ' . auth()->user()->role);
+        \Log::info('Penyuluh ID: ' . (auth()->user()->penyuluh ? auth()->user()->penyuluh->id : 'TIDAK ADA'));
+        \Log::info('Laporan ID: ' . $id);
+
         $laporan = LaporanKth::with(['kth', 'dokumentasi', 'penyuluh'])->find($id);
         
         if (!$laporan) {
+            \Log::error('Laporan tidak ditemukan: ' . $id);
             return response()->json(['error' => 'Laporan tidak ditemukan'], 404);
         }
+
+        \Log::info('Laporan ditemukan:');
+        \Log::info('  - id_penyuluh: ' . $laporan->id_penyuluh);
+        \Log::info('  - id_kth: ' . $laporan->id_kth);
+        \Log::info('  - status_verifikasi: ' . $laporan->status_verifikasi);
+
+        // Cek kepemilikan data
+        $userPenyuluhId = auth()->user()->penyuluh ? auth()->user()->penyuluh->id : null;
         
-        if ($laporan->id_penyuluh !== auth()->user()->penyuluh->id) {
+        if ($laporan->id_penyuluh !== $userPenyuluhId) {
+            \Log::warning('⚠️ AKSES DITOLAK!');
+            \Log::warning('  - Laporan milik penyuluh ID: ' . $laporan->id_penyuluh);
+            \Log::warning('  - User penyuluh ID: ' . $userPenyuluhId);
             return response()->json(['error' => 'Anda tidak memiliki akses ke data ini.'], 403);
         }
 
+        \Log::info('✅ Akses disetujui');
+
         $dokumentasi = $laporan->dokumentasi()->get(['id', 'file_path']);
 
-        // 🔥 FORMAT PERIODE LAPORAN KE Y-m-d
         $periodeLaporan = null;
         if ($laporan->periode_laporan) {
             $periodeLaporan = \Carbon\Carbon::parse($laporan->periode_laporan)->format('Y-m-d');
@@ -215,7 +240,7 @@ public function editData($id)
             'id' => $laporan->id,
             'id_kth' => $laporan->id_kth,
             'nama_kth' => $laporan->kth ? $laporan->kth->nama_kth : 'Data KTH',
-            'periode_laporan' => $periodeLaporan, // 🔥 Format Y-m-d
+            'periode_laporan' => $periodeLaporan,
             'jenis_usaha' => $laporan->jenis_usaha,
             'nib' => $laporan->nib,
             'pirt' => $laporan->pirt,
@@ -242,6 +267,7 @@ public function editData($id)
         
     } catch (\Exception $e) {
         \Log::error('Error di editData: ' . $e->getMessage());
+        \Log::error($e->getTraceAsString());
         return response()->json(['error' => $e->getMessage()], 500);
     }
 }
